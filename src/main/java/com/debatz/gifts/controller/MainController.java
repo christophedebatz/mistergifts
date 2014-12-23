@@ -23,6 +23,16 @@ public class MainController {
  
 	}
  
+	@RequestMapping(value = "/about", method = RequestMethod.GET)
+	public ModelAndView aboutPage() {
+ 
+	  ModelAndView model = new ModelAndView();
+	  model.setViewName("about");
+	  return model;
+ 
+	}
+	
+	
 	@RequestMapping(value = "/admin**", method = RequestMethod.GET)
 	public ModelAndView adminPage() {
  

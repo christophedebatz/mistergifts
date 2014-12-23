@@ -3,6 +3,8 @@ package com.debatz.gifts.model;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.ManyToOne;
+
 public class Gift implements Serializable
 {
 
@@ -12,6 +14,8 @@ public class Gift implements Serializable
 	private String name;
 	private String details;
 	private List<String> shopLink;
+	
+	@ManyToOne
 	private User booker;
 	
 	

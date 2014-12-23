@@ -2,10 +2,12 @@ package com.debatz.gifts.model;
 
 import java.io.Serializable;
 import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
  
 
@@ -24,7 +26,10 @@ public class User implements Serializable
     private String password;
     private boolean enabled;
     
+    @OneToMany
     private List<Gift> ownedGifts;
+    
+    @OneToMany(mappedBy="user")
     private List<Gift> bookedGifts;
    
     

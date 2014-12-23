@@ -6,8 +6,12 @@
 	http://www.springframework.org/schema/security
 	http://www.springframework.org/schema/security/spring-security-3.2.xsd">
  
-	<http auto-config="true" use-expressions="true">
+	<http auto-config="true" use-expressions="true" create-session="ifRequired">
  
+	 	<session-management invalid-session-url="/403">
+	        <concurrency-control max-sessions="2" expired-url="/403" />
+	    </session-management>
+    
 		<intercept-url pattern="/admin**" access="hasRole('ROLE_ADMIN')" />
  
 		<!-- access denied page -->

@@ -6,7 +6,7 @@
     <ul class="nav navbar-nav">
       <li><a href="#">Family lists</a></li>
       <li><a href="#">My List</a></li>
-      <li><a href="#">About</a></li>
+      <li><a href="<c:url value="/about" />">About</a></li>
     </ul>
     <ul class="nav pull-right navbar-nav">
     	<li><a href="<c:url value="/login" />">Log in</a></li>
