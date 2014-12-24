@@ -1,5 +1,6 @@
 package com.debatz.gifts.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -9,10 +10,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.debatz.gifts.bean.SessionBean;
  
 @Controller
-public class MainController {
+public class MainController 
+{
  
+	@Autowired
+    private SessionBean sessionBean;
+	
+	
 	@RequestMapping(value = { "/" }, method = RequestMethod.GET)
 	public ModelAndView defaultPage() {
  
@@ -20,7 +28,29 @@ public class MainController {
 	  model.setViewName("bonjour");
 	  
 	  return model;
- 
+	}
+	
+	
+	
+	@RequestMapping(value = "/mylist/update", method = RequestMethod.GET)
+	public ModelAndView myListUpdatePage() 
+	{
+		ModelAndView model = new ModelAndView();
+		model.addObject("user", this.sessionBean.getCurrentUser());
+		model.setViewName("mylistUpdate");
+		
+		return model;
+	}
+	
+	
+	@RequestMapping(value = "/mylist", method = RequestMethod.GET)
+	public ModelAndView myListPage() 
+	{
+		ModelAndView model = new ModelAndView();
+		model.addObject("user", this.sessionBean.getCurrentUser());
+		model.setViewName("mylist");
+		
+		return model;
 	}
  
 	@RequestMapping(value = "/about", method = RequestMethod.GET)

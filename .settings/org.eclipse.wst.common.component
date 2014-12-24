@@ -3,7 +3,7 @@
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-        <property name="context-root" value="debatz-mister-gifts"/>
         <property name="java-output-path" value="/debatz-mister-gifts/target/classes"/>
+        <property name="context-root" value="mistergifts"/>
     </wb-module>
 </project-modules>

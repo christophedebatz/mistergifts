@@ -4,14 +4,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.debatz.gifts.model.User;
 
-@Service
 @Repository
-public class UserDao implements UserDaoInterface
+public class UserDao
 {
  
 	@PersistenceContext
@@ -23,9 +21,9 @@ public class UserDao implements UserDaoInterface
         return person.getUsername();
     }
 
-	@Override
-	@Transactional(readOnly=true)
-	public User findByUserName(String username) {
+	@Transactional(readOnly = true)
+	public User findByUserName(String username) 
+	{	
 		return this.em.find(User.class, username);
 	}
 }

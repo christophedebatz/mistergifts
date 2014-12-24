@@ -1,8 +1,29 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<persistence version="1.0"
-    xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+  version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
  
-    <persistence-unit name="jpaData" />
- 
+    <persistence-unit name="mistergifts_unit" transaction-type="RESOURCE_LOCAL">
+	    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+	    
+	    <class>com.debatz.gifts.model.User</class>
+	    <class>com.debatz.gifts.model.Gift</class>
+	    
+	    <properties>
+		    <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+		    <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/mistergifts" />
+	     	<property name="javax.persistence.jdbc.user" value="root" />
+    		<property name="javax.persistence.jdbc.password" value="root" />
+		    <property name="eclipselink.ddl-generation" value="create-tables" />
+            <property name="eclipselink.jdbc.cache-statements" value="true" />
+            <property name="eclipselink.jdbc.batch-writing" value="JDBC" />
+            <property name="eclipselink.jdbc.batch-writing.size" value="1000" />
+            <property name="eclipselink.cache.shared.default" value="false" />
+            <property name="eclipselink.cache.shared.Customer" value="true" />
+            <property name="eclipselink.logging.level" value="off" />
+            <property name="eclipselink.persistence-context.close-on-commit" value="true" />
+            <property name="eclipselink.persistence-context.flush-mode" value="commit" />
+            <property name="eclipselink.persistence-context.persist-on-commit" value="true" />
+	    </properties>
+     </persistence-unit>
 </persistence>

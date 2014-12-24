@@ -13,13 +13,14 @@
 	    </session-management>
     
 		<intercept-url pattern="/admin**" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/mylist**" access="hasRole('ROLE_USER')" />
  
 		<!-- access denied page -->
-		<access-denied-handler error-page="/403" />
+		<!-- <access-denied-handler error-page="/403" /> -->
  
 		<form-login 
 		    login-page="/login" 
-		    default-target-url="/welcome" 
+		    default-target-url="/mylist" 
 			authentication-failure-url="/login?error" 
 			username-parameter="username"
 			password-parameter="password" />
@@ -29,10 +30,16 @@
 		
 	</http>
  
-	<authentication-manager>
+	<!-- <authentication-manager>
 	  <authentication-provider>
 		<jdbc-user-service data-source-ref="dataSource" users-by-username-query="select username,password, enabled from users where username=?" authorities-by-username-query="select username, role from user_roles where username =?" />
 	  </authentication-provider>
+	</authentication-manager> -->
+	
+	<authentication-manager>
+		<authentication-provider user-service-ref="customUserDetailsService" >
+			<password-encoder hash="bcrypt" />    
+		</authentication-provider>
 	</authentication-manager>
 	
 </beans:beans>

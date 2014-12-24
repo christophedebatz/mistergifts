@@ -1,37 +1,61 @@
 package com.debatz.gifts.model;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
+@Entity
+@Table(name="GIFTS")
 public class Gift implements Serializable
 {
 
 	private static final long serialVersionUID = -3240452031165466075L;
 	
-	private Long id;
+	@Id
+    @Column(nullable=false)
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Integer id;
+	
+	@Column(name = "name", nullable = false, length = 70)
 	private String name;
+	
+	@Column(name = "details", nullable = true)
 	private String details;
-	private List<String> shopLink;
+	
+	@Column(name = "username", unique = true, nullable = false, length = 45)
+	@ElementCollection(fetch = FetchType.LAZY)
+	private Set<String> shopLinks;
 	
 	@ManyToOne
 	private User booker;
 	
+	public Gift() {
+		super();
+	}
 	
-	public Gift(String name, String details, List<String> shopLink, User owner) {
+	
+	public Gift(String name, String details, Set<String> shopLinks, User owner) {
 		super();
 		this.name = name;
 		this.details = details;
-		this.shopLink = shopLink;
+		this.shopLinks = shopLinks;
 		this.booker = owner;
 	}
 	
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 	
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	
@@ -51,12 +75,12 @@ public class Gift implements Serializable
 		this.details = details;
 	}
 	
-	public List<String> getShopLink() {
-		return shopLink;
+	public Set<String> getShopLinks() {
+		return shopLinks;
 	}
 	
-	public void setShopLink(List<String> shopLink) {
-		this.shopLink = shopLink;
+	public void setShopLinks(Set<String> shopLinks) {
+		this.shopLinks = shopLinks;
 	}
 
 	public User getBooker() {
