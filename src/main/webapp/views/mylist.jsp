@@ -7,53 +7,68 @@
 
 <div class="container">
   <div class="jumbotron">
-    <h2>My gifts list</h2>
+    <h2>My gift list</h2>
 
+	<p style="margin-top: 40px;">
 
-	<c:choose>
-		<c:when test="${ empty user.ownedGifts}">
-		
-			<div class="alert alert-info" role="alert" style="padding-bottom: 30px;">
-				<div style="float: right;">
-					<a class="btn btn-large btn-primary" href="<c:url value="/mylist/update" />">Create one now</a>
-				</div>
-				<p>Your current gift list is still empty yet...</p>
-			</div>
+		<fieldset>
+			<legend>My list</legend>
+
+			<c:choose>
+				<c:when test="${ empty user.ownedGifts}">
+				
+					<div class="alert alert-info" role="alert">
+						<p>Your current gift list is still empty yet...</p>
+					</div>
+					
+				</c:when>
 			
-		</c:when>
+				<c:otherwise>
+				
+					<div class="table-responsive">
+					  <table class="table table-hover">
+			  			<thead>#</thead>
+					  	<thead>Name</thead>
+					  	<thead>Details</thead>
+					  	
+					  	<c:forEach items="${user.ownedGifts}" var="gift">
+					  	
+					  		<td>${gift.id}</td>
+					  		<td>${gift.name}</td>
+					  		<td>${gift.details}</td>
+					  	
+				  		</c:forEach>
+				  		
+		  			  </table>
+				   </div>
+				
+				</c:otherwise>
 		
-		
-		<c:otherwise>
-		
-			<div class="table-responsive">
-			  <table class="table table-hover">
-	  			<thead>#</thead>
-			  	<thead>Name</thead>
-			  	<thead>Details</thead>
-			  	
-			  	<c:forEach items="${user.ownedGifts}" var="gift">
-			  	
-			  		<td>${gift.id}</td>
-			  		<td>${gift.name}</td>
-			  		<td>${gift.details}</td>
-			  	
-		  		</c:forEach>
-		  		
-  			  </table>
-		   </div>
-		
-		</c:otherwise>
-	
-	</c:choose>
+			</c:choose>
+		</fieldset>
 
+		<img src="<c:url value="/resources/pictures/gifts.png" />" style="float: right;" />
+		<fieldset>
+			<legend>New gift</legend>
+			<form action="<c:url value="/mylist" />" method="post">
+			
+				<div class="form-group">
+				    <input type="text" name="name" class="form-control" placeholder="Gift name..." />
+			  	</div>
+			  	<div class="form-group">
+				    <input type="text" name="details" class="form-control" placeholder="Details..." />
+			  	</div>
+				<div class="form-group">
+				    <input type="text" name="shoplink" class="form-control" placeholder="Shop link..." />
+			  	</div>
+			  	
+			  	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+			  	
+			  	<button class="btn btn-large btn-default">Add this!</button>
+			</form>
+		</fieldset>
+	</p>
 	
-
-
-	
-		
-	
-	
-    
   </div>
 </div>
 

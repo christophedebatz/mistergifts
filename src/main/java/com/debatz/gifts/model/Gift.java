@@ -1,6 +1,7 @@
 package com.debatz.gifts.model;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -31,9 +32,8 @@ public class Gift implements Serializable
 	@Column(name = "details", nullable = true)
 	private String details;
 	
-	@Column(name = "username", unique = true, nullable = false, length = 45)
-	@ElementCollection(fetch = FetchType.LAZY)
-	private Set<String> shopLinks;
+	@Column(name = "shoplinks", unique = true, nullable = false, length = 45)
+	private List<String> shopLinks;
 	
 	@ManyToOne
 	private User booker;
@@ -43,7 +43,7 @@ public class Gift implements Serializable
 	}
 	
 	
-	public Gift(String name, String details, Set<String> shopLinks, User owner) {
+	public Gift(String name, String details, List<String> shopLinks, User owner) {
 		super();
 		this.name = name;
 		this.details = details;
@@ -75,11 +75,11 @@ public class Gift implements Serializable
 		this.details = details;
 	}
 	
-	public Set<String> getShopLinks() {
+	public List<String> getShopLinks() {
 		return shopLinks;
 	}
 	
-	public void setShopLinks(Set<String> shopLinks) {
+	public void setShopLinks(List<String> shopLinks) {
 		this.shopLinks = shopLinks;
 	}
 

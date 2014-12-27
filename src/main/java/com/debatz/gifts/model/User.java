@@ -97,6 +97,10 @@ public class User implements Serializable
 	public void setOwnedGifts(List<Gift> ownedGifts) {
 		this.ownedGifts = ownedGifts;
 	}
+	
+	public void addOwnedGift(Gift ownedGift) {
+		this.ownedGifts.add(ownedGift);
+	}
 
 	public List<Gift> getBookedGifts() {
 		return bookedGifts;
