@@ -2,6 +2,8 @@ package com.debatz.gifts.model;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,9 +18,11 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "USER_ROLES",
 	uniqueConstraints = @UniqueConstraint(
 		columnNames = { "role", "username" }))
-public class UserRole
+public class UserRole implements Serializable
 {
- 
+
+	private static final long serialVersionUID = 8043295643963444097L;
+	
 	private Integer id;
 	private User user;
 	private String role;

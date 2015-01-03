@@ -135,6 +135,6 @@
 		    </configuration>
 		</plugin>
 	</plugins>
-    <finalName>debatz-mister-gifts</finalName>
+    <finalName>mister-gifts</finalName>
   </build>
 </project>

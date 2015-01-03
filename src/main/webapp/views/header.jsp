@@ -22,5 +22,7 @@
 		
 	</head>
 	<body>
-	
-<jsp:include page="menu.jsp"></jsp:include>
+
+		<div id="wrap">
+
+		<jsp:include page="menu.jsp"></jsp:include>

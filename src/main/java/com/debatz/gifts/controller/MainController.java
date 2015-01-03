@@ -1,5 +1,8 @@
 package com.debatz.gifts.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -12,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.debatz.gifts.bean.SessionBean;
+import com.debatz.gifts.model.Gift;
+import com.debatz.gifts.model.User;
+import com.debatz.gifts.model.dao.GiftDao;
  
 @Controller
 public class MainController 
@@ -19,6 +25,9 @@ public class MainController
  
 	@Autowired
     private SessionBean sessionBean;
+	
+	@Autowired
+	private GiftDao giftDao;
 	
 	
 	@RequestMapping(value = { "/" }, method = RequestMethod.GET)
@@ -30,22 +39,32 @@ public class MainController
 	  return model;
 	}
 	
-	
-	
-	@RequestMapping(value = "/mylist/update", method = RequestMethod.GET)
-	public ModelAndView myListUpdatePage() 
+	@RequestMapping(value = "/mylist", method = RequestMethod.GET)
+	public ModelAndView myListPage() 
 	{
 		ModelAndView model = new ModelAndView();
 		model.addObject("user", this.sessionBean.getCurrentUser());
-		model.setViewName("mylistUpdate");
+		model.setViewName("mylist");
 		
 		return model;
 	}
 	
-	
-	@RequestMapping(value = "/mylist", method = RequestMethod.GET)
-	public ModelAndView myListPage() 
+	@RequestMapping(value = "/mylist", method = RequestMethod.POST)
+	public ModelAndView myListPageUpdate(
+			@RequestParam(value="name", required=true) String name,
+			@RequestParam(value="details", required=false) String details,
+			@RequestParam(value="shoplink", required=false) String shopLink) 
 	{
+		List<String> shopLinks = new ArrayList<String>();
+		shopLinks.add(shopLink);
+		
+		Gift gift = new Gift(name, details, shopLinks, this.sessionBean.getCurrentUser());
+		this.giftDao.save(gift);
+		
+		User user = this.sessionBean.getCurrentUser();
+		user.addOwnedGift(gift);
+		this.sessionBean.setCurrentUser(user);
+		
 		ModelAndView model = new ModelAndView();
 		model.addObject("user", this.sessionBean.getCurrentUser());
 		model.setViewName("mylist");
@@ -59,7 +78,6 @@ public class MainController
 	  ModelAndView model = new ModelAndView();
 	  model.setViewName("about");
 	  return model;
- 
 	}
 	
 	

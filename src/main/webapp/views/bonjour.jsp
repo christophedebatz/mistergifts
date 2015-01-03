@@ -9,7 +9,7 @@
     <h1>Mister Gifts</h1>
     <p class="lead">Welcome to Mister Gifts. The web portal that allow you to expose you presents list and also participate to another gifts list. To begin, click on the bellow button or browe the top menu.</p>
     <p style="margin-top: 50px;">
-    	<a class="btn btn-large btn-success" href="<c:url value="/mylist/update" />" target="ext">Begin my own list</a>
+    	<a class="btn btn-large btn-success" href="<c:url value="/mylist" />">Begin my own list</a>
     </p>
     
   </div>
