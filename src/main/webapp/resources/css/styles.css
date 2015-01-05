@@ -1,5 +1,6 @@
 html,
 body {
+	font-size: 15px;
   height: 100%;
   /* The html and body elements cannot have any padding or margin. */
 }
@@ -19,6 +20,23 @@ body {
   height: 60px;
   background-color: #222;
   color: #CCC;
+}
+
+.container a {
+	font-size: 18px;
+	font-family: 'Montserrat', sans-serif;
+}
+
+.container table {
+	font-size: 16px;
+}
+
+.container legend {
+	font-weight: bold;
+}
+
+.container fieldset {
+	margin-bottom: 20px;
 }
 
 
@@ -46,7 +64,6 @@ p {
 }
 
 body {
-	font-size: 15px;
   font-family: 'Montserrat', sans-serif;
   -webkit-font-smoothing: antialiased;
   background-color: #245682 !important;

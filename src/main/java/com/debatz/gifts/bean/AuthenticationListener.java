@@ -16,6 +16,7 @@ public class AuthenticationListener implements ApplicationListener<Authenticatio
 	@Autowired
 	private UserDao userDao;
 	
+	
 	@Override
 	public void onApplicationEvent(final AuthenticationSuccessEvent event) 
 	{
@@ -25,5 +26,4 @@ public class AuthenticationListener implements ApplicationListener<Authenticatio
     		this.userDao.findByUserName(userDetails.getUsername())
 		);
 	}
-	
 }

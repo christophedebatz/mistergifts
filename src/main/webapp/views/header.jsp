@@ -14,6 +14,7 @@
 		<title>Mister Gifts v1.0</title>
 		
 		<link href="<c:url value="/resources/css/bootstrap.min.css" />" rel="stylesheet">
+		<%-- <link href="<c:url value="/resources/css/bootstrap-theme.min.css" />" rel="stylesheet"> --%>
 		<link href="<c:url value="/resources/css/styles.css" />" rel="stylesheet">
 		
 		<!--[if lt IE 9]>
@@ -25,4 +26,4 @@
 
 		<div id="wrap">
 
-		<jsp:include page="menu.jsp"></jsp:include>
+			<jsp:include page="menu.jsp"></jsp:include>

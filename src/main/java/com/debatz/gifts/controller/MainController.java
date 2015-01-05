@@ -1,6 +1,6 @@
 package com.debatz.gifts.controller;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +35,10 @@ public class MainController
 	private UserDao userDao;
 	
 	
+	
+	
+	
+	
 	@RequestMapping(value = { "/" }, method = RequestMethod.GET)
 	public ModelAndView defaultPage() {
  
@@ -44,15 +48,23 @@ public class MainController
 	  return model;
 	}
 	
+	
+	
+	
+	
 	@RequestMapping(value = "/mylist", method = RequestMethod.GET)
 	public ModelAndView myListPage() 
-	{
+	{		
 		ModelAndView model = new ModelAndView();
 		model.addObject("user", this.sessionBean.getCurrentUser());
-		model.setViewName("mylist");
+		model.setViewName("myList");
 		
 		return model;
 	}
+	
+	
+	
+	
 	
 	@RequestMapping(value = "/mylist/{giftId}", method = RequestMethod.GET)
 	public ModelAndView myListGiftPage(@PathVariable(value="giftId") final int giftId) 
@@ -69,21 +81,22 @@ public class MainController
 		}
 		
 		model.addObject("selectedGift", selectedGift);
-		model.setViewName("mylist");
+		model.setViewName("giftDetails");
 		
 		return model;
 	}
+	
+	
+	
+	
 	
 	@RequestMapping(value = "/mylist", method = RequestMethod.POST)
 	public ModelAndView myListPageUpdate(
 			@RequestParam(value="name", required=true) String name,
 			@RequestParam(value="details", required=false) String details,
-			@RequestParam(value="shoplink", required=false) String shopLink) 
+			@RequestParam(value="shoplink", required=false) List<String> shoplinks) 
 	{
-		List<String> shopLinks = new ArrayList<String>();
-		shopLinks.add(shopLink);
-		
-		Gift gift = new Gift(name, details, shopLinks, this.sessionBean.getCurrentUser());
+		Gift gift = new Gift(name, details, shoplinks, this.sessionBean.getCurrentUser());
 		this.giftDao.save(gift); 
 		
 		User user = this.sessionBean.getCurrentUser();
@@ -94,12 +107,16 @@ public class MainController
 		
 		ModelAndView model = new ModelAndView();
 		model.addObject("user", user);
-		model.setViewName("mylist");
+		model.setViewName("myList");
 		
 		return model;
 	}
 	
+	
+	
  
+	
+	
 	@RequestMapping(value = "/about", method = RequestMethod.GET)
 	public ModelAndView aboutPage() {
  
@@ -109,16 +126,9 @@ public class MainController
 	}
 	
 	
-	@RequestMapping(value = "/admin**", method = RequestMethod.GET)
-	public ModelAndView adminPage() {
- 
-	  ModelAndView model = new ModelAndView();
-	  model.addObject("title", "Spring Security Login Form - Database Authentication");
-	  model.addObject("message", "This page is for ROLE_ADMIN only!");
-	  model.setViewName("admin");
-	  return model;
- 
-	}
+	
+	
+	
  
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView login(@RequestParam(value = "error", required = false) String error,
@@ -138,7 +148,12 @@ public class MainController
  
 	}
  
-	//for 403 access denied page
+	
+	
+
+
+	
+	
 	@RequestMapping(value = "/403", method = RequestMethod.GET)
 	public ModelAndView accesssDenied() {
  
@@ -151,7 +166,7 @@ public class MainController
 		model.addObject("username", userDetail.getUsername());
 	  }
  
-	  model.setViewName("403");
+	  model.setViewName("login");
 	  return model;
  
 	}

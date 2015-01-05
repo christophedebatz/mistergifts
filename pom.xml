@@ -129,7 +129,7 @@
 		    <configuration>
 		      <forkMode>once</forkMode>
 		      <argLine>
-		        -javaagent:${settings.localRepository}/org/springframework/spring-agent/${spring.version}/spring-agent-2.5.6.jar -javaagent:${settings.localRepository}/org/aspectj/aspectjweaver/1.6.1/aspectjweaver-1.8.0.jar
+		        -javaagent:${settings.localRepository}/org/springframework/spring-agent/2.5.6/spring-agent-2.5.6.jar -javaagent:${settings.localRepository}/org/aspectj/aspectjweaver/1.6.1/aspectjweaver-1.8.0.jar
 		      </argLine>
 		      <useSystemClassloader>true</useSystemClassloader>
 		    </configuration>

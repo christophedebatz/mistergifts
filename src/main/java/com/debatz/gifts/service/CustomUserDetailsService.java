@@ -38,8 +38,6 @@ public class CustomUserDetailsService implements UserDetailsService
  
 	}
  
-	// Converts com.mkyong.users.model.User user to
-	// org.springframework.security.core.userdetails.User
 	private User buildUserForAuthentication(com.debatz.gifts.model.User user,  List<GrantedAuthority> authorities) {
 		return new User(user.getUsername(), user.getPassword(), 
 			user.isEnabled(), true, true, true, authorities);
@@ -49,7 +47,6 @@ public class CustomUserDetailsService implements UserDetailsService
  
 		Set<GrantedAuthority> setAuths = new HashSet<GrantedAuthority>();
  
-		// Build user's authorities
 		for (UserRole userRole : userRoles) {
 			setAuths.add(new SimpleGrantedAuthority(userRole.getRole()));
 		}

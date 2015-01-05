@@ -33,7 +33,7 @@
 		
 		<p>
 			<b>System</b><br />
-			<a href="http://www.raspberrypi.org" target="_blank">RaspBian (Linux)</a>
+			<a href="http://www.raspbian.org" target="_blank">RaspBian (Linux)</a>
 		</p>
 		
 		<p>
@@ -48,7 +48,7 @@
 		
 		<p>
 			<b>Technologies</b><br />
-			<a href="http://spring.io/" target="_blank">Spring 4</a> (MVC, Security)
+			<a href="http://spring.io" target="_blank">Spring 4</a> (MVC, Security)
 		</p>
 	
 	</div>

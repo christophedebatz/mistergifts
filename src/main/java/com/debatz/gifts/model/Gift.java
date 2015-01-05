@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,8 +33,8 @@ public class Gift implements Serializable
 	private String details;
 	
 	@Column(name = "shoplinks", unique = false, nullable = true, length = 255)
-	@ElementCollection
-	private List<String> shopLinks = new ArrayList<String>();
+	@ElementCollection(fetch=FetchType.EAGER)
+	private List<String> shopLinks;
 	
 	@ManyToOne
 	private User booker;
