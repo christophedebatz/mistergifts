@@ -11,13 +11,19 @@ import com.debatz.gifts.model.Gift;
 @Repository
 public class GiftDao
 {
- 
+
 	@PersistenceContext
 	private EntityManager em;
-     
+    
 	@Transactional
     public int save(Gift gift) {
         this.em.persist(gift);
+        return gift.getId();
+    }
+	
+	@Transactional
+    public int update(Gift gift) {
+        this.em.merge(gift);
         return gift.getId();
     }
 }

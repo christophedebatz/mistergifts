@@ -33,7 +33,7 @@ public class User implements Serializable
 	@Column(name = "enabled", nullable = false)
     private boolean enabled;
     
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy="owner", fetch = FetchType.LAZY)
     private List<Gift> ownedGifts = new ArrayList<Gift>();
    
     @OneToMany(mappedBy="booker", fetch = FetchType.LAZY)

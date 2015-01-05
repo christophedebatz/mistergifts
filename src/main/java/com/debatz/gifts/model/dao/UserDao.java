@@ -11,13 +11,19 @@ import com.debatz.gifts.model.User;
 @Repository
 public class UserDao
 {
- 
+
 	@PersistenceContext
 	private EntityManager em;
      
 	@Transactional
     public String save(User person) {
         this.em.persist(person);
+        return person.getUsername();
+    }
+	
+	@Transactional
+    public String update(User person) {
+        this.em.merge(person);
         return person.getUsername();
     }
 

@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +19,7 @@ import com.debatz.gifts.bean.SessionBean;
 import com.debatz.gifts.model.Gift;
 import com.debatz.gifts.model.User;
 import com.debatz.gifts.model.dao.GiftDao;
+import com.debatz.gifts.model.dao.UserDao;
  
 @Controller
 public class MainController 
@@ -28,6 +30,9 @@ public class MainController
 	
 	@Autowired
 	private GiftDao giftDao;
+	
+	@Autowired
+	private UserDao userDao;
 	
 	
 	@RequestMapping(value = { "/" }, method = RequestMethod.GET)
@@ -49,6 +54,26 @@ public class MainController
 		return model;
 	}
 	
+	@RequestMapping(value = "/mylist/{giftId}", method = RequestMethod.GET)
+	public ModelAndView myListGiftPage(@PathVariable(value="giftId") final int giftId) 
+	{
+		ModelAndView model = new ModelAndView();
+		List<Gift> gifts = this.sessionBean.getCurrentUser().getOwnedGifts();
+		Gift selectedGift = null;
+		
+		for (Gift gift : gifts) {
+			if (gift.getId() == giftId) {
+				selectedGift = gift;
+				break;
+			}
+		}
+		
+		model.addObject("selectedGift", selectedGift);
+		model.setViewName("mylist");
+		
+		return model;
+	}
+	
 	@RequestMapping(value = "/mylist", method = RequestMethod.POST)
 	public ModelAndView myListPageUpdate(
 			@RequestParam(value="name", required=true) String name,
@@ -59,18 +84,21 @@ public class MainController
 		shopLinks.add(shopLink);
 		
 		Gift gift = new Gift(name, details, shopLinks, this.sessionBean.getCurrentUser());
-		this.giftDao.save(gift);
+		this.giftDao.save(gift); 
 		
 		User user = this.sessionBean.getCurrentUser();
 		user.addOwnedGift(gift);
+		this.userDao.update(user);
+		
 		this.sessionBean.setCurrentUser(user);
 		
 		ModelAndView model = new ModelAndView();
-		model.addObject("user", this.sessionBean.getCurrentUser());
+		model.addObject("user", user);
 		model.setViewName("mylist");
 		
 		return model;
 	}
+	
  
 	@RequestMapping(value = "/about", method = RequestMethod.GET)
 	public ModelAndView aboutPage() {

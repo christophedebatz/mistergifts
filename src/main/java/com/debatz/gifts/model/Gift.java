@@ -31,12 +31,16 @@ public class Gift implements Serializable
 	@Column(name = "details", nullable = true)
 	private String details;
 	
-	@Column(name = "shoplinks", unique = true, nullable = false, length = 45)
+	@Column(name = "shoplinks", unique = false, nullable = true, length = 255)
 	@ElementCollection
 	private List<String> shopLinks = new ArrayList<String>();
 	
 	@ManyToOne
 	private User booker;
+	
+	@ManyToOne
+	private User owner;
+	
 	
 	public Gift() {
 		super();
@@ -48,7 +52,7 @@ public class Gift implements Serializable
 		this.name = name;
 		this.details = details;
 		this.shopLinks = shopLinks;
-		this.booker = owner;
+		this.owner = owner;
 	}
 
 
@@ -102,7 +106,12 @@ public class Gift implements Serializable
 	}
 
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public User getOwner() {
+		return owner;
+	}
+
+
+	public void setOwner(User owner) {
+		this.owner = owner;
 	}
 }
