@@ -68,6 +68,33 @@ public class MainController
 	
 	
 	
+	
+	@RequestMapping(value = "/family/booking", method = RequestMethod.POST)
+	public ModelAndView familyBookingPage(@RequestParam(value="giftId", required=true) int giftId)
+	{
+		ModelAndView model = new ModelAndView();
+		Gift giftToBook = this.giftDao.findGift(giftId);
+		
+		if (giftToBook != null) 
+		{
+			this.sessionBean.getCurrentUser().addBookedGift(giftToBook);
+			User currentUser = this.sessionBean.getCurrentUser();
+			this.userDao.update(currentUser);
+			
+			model.addObject("user", currentUser);
+			model.addObject("gift", giftToBook);
+		}
+		
+		model.setViewName("booking");
+		
+		return model;
+	}
+	
+	
+	
+	
+	
+	
 	@RequestMapping(value = "/mylist", method = RequestMethod.GET)
 	public ModelAndView myListPage() 
 	{		

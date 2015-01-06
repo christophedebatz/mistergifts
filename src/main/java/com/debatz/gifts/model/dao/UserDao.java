@@ -37,8 +37,7 @@ public class UserDao
 	}
 
 	@Transactional(readOnly = true)
-	public User findByUserName(String username) 
-	{	
+	public User findByUserName(String username) {	
 		return this.em.find(User.class, username);
 	}
 }

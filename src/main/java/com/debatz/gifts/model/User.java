@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -33,13 +34,13 @@ public class User implements Serializable
 	@Column(name = "enabled", nullable = false)
     private boolean enabled;
     
-    @OneToMany(mappedBy="owner", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="owner", fetch = FetchType.EAGER, cascade=CascadeType.PERSIST)
     private List<Gift> ownedGifts = new ArrayList<Gift>();
    
-    @OneToMany(mappedBy="booker", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="booker", fetch = FetchType.EAGER, cascade=CascadeType.PERSIST)
     private List<Gift> bookedGifts = new ArrayList<Gift>();
     
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade=CascadeType.PERSIST)
     private List<UserRole> roles = new ArrayList<UserRole>(0);
     
     
@@ -108,6 +109,10 @@ public class User implements Serializable
 
 	public void setBookedGifts(List<Gift> bookedGifts) {
 		this.bookedGifts = bookedGifts;
+	}
+	
+	public void addBookedGift(Gift bookedGift) {
+		this.bookedGifts.add(bookedGift);
 	}
 
 	public List<UserRole> getRoles() {
