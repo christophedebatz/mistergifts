@@ -11,10 +11,10 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<meta charset="utf-8">
 		
-		<title>Mister Gifts v1.0</title>
+		<title>Mister Gifts</title>
 		
+		<link rel="icon" href="<c:url value="/resources/pictures/favicon.ico" />" />
 		<link href="<c:url value="/resources/css/bootstrap.min.css" />" rel="stylesheet">
-		<%-- <link href="<c:url value="/resources/css/bootstrap-theme.min.css" />" rel="stylesheet"> --%>
 		<link href="<c:url value="/resources/css/styles.css" />" rel="stylesheet">
 		
 		<!--[if lt IE 9]>
@@ -23,6 +23,8 @@
 		
 	</head>
 	<body>
+	
+	<img src="<c:url value="/resources/pictures/rubban.png" />" style="z-index: 1000; position: absolute; top: 0; left: 0;" />
 
 		<div id="wrap">
 

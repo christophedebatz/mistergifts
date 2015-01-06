@@ -1,6 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <jsp:include page="header.jsp"></jsp:include>
 
@@ -28,6 +29,7 @@
 						  <thead>
 							  <tr>
 							  	<th>Name</th>
+							  	<th>Brand</th>
 							  	<th>Details</th>
 							  	<th>&nbsp;</th>
 							  </tr>
@@ -37,8 +39,9 @@
 						  	
 						  		<tr style="cursor: pointer;" onclick="window.location='./mylist/${gift.id}';">
 							  		<td><a href="<c:url value="/mylist/${gift.id}" />">${gift.name}</a></td>
-							  		<td>${gift.details}</td>
-							  		<td><a class="btn btn-xs btn-danger">Remove</a></td>
+							  		<td>${fn:substring(gift.brand, 0, 10)}</td>
+							  		<td>${fn:substring(gift.details, 0, 50)}...</td>
+							  		<td><button class="btn btn-xs btn-danger" onclick="window.location='<c:url value="/mylist/${gift.id}?remove" />';">Remove</button></td>
 						  		</tr>
 						  		
 					  		</c:forEach>
@@ -55,17 +58,21 @@
 		
 		<fieldset>
 			<legend>New gift</legend>
-			<form action="<c:url value="/mylist" />" method="post">
+			<form action="<c:url value="/mylist" />" method="post" style="width: 85%;">
 			
 				<div class="form-group">
 				    <input type="text" name="name" class="form-control" placeholder="Name..." />
 			  	</div>
 			  	
 			  	<div class="form-group">
+				    <input type="text" name="brand" class="form-control" placeholder="Brand, editor..." />
+			  	</div>
+			  	
+			  	<div class="form-group">
 				    <input type="text" name="details" class="form-control" placeholder="Details..." />
 			  	</div>
 			  	
-			  	<div style="float:right;" class="btn-group">
+			  	<div style="float:right; margin-bottom: 10px;" class="btn-group">
 					<button type="button" onclick="addLink();" class="btn btn-xs btn-success">Add</button>
 					<button type="button" onclick="removeLink();" class="btn btn-xs btn-danger">Remove</button>
 				</div>
@@ -80,7 +87,6 @@
 			  	
 			  	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 			  	
-			  	<hr />
 			  	<button class="btn btn-large btn-primary">Add this gift</button>
 			</form>
 		</fieldset>

@@ -5,6 +5,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.debatz.gifts.model.User;
 import com.debatz.gifts.model.dao.UserDao;
 
 public class AuthenticationListener implements ApplicationListener<AuthenticationSuccessEvent>
@@ -22,8 +23,10 @@ public class AuthenticationListener implements ApplicationListener<Authenticatio
 	{
         UserDetails userDetails = (UserDetails) event.getAuthentication().getPrincipal();
         
-        this.sessionBean.setCurrentUser(
-    		this.userDao.findByUserName(userDetails.getUsername())
-		);
+        User user = this.userDao.findByUserName(userDetails.getUsername());
+        user.getOwnedGifts().size();
+        user.getBookedGifts().size();
+        
+        this.sessionBean.setCurrentUser(user);
 	}
 }

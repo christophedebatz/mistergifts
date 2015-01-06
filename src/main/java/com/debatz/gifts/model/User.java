@@ -33,10 +33,10 @@ public class User implements Serializable
 	@Column(name = "enabled", nullable = false)
     private boolean enabled;
     
-    @OneToMany(mappedBy="owner", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy="owner", fetch = FetchType.EAGER)
     private List<Gift> ownedGifts = new ArrayList<Gift>();
    
-    @OneToMany(mappedBy="booker", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy="booker", fetch = FetchType.EAGER)
     private List<Gift> bookedGifts = new ArrayList<Gift>();
     
     @OneToMany(mappedBy = "user")

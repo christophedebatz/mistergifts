@@ -29,6 +29,9 @@ public class Gift implements Serializable
 	@Column(name = "name", nullable = false, length = 70)
 	private String name;
 	
+	@Column(name = "brand", nullable = true, length = 70)
+	private String brand;
+	
 	@Column(name = "details", nullable = true)
 	private String details;
 	
@@ -48,9 +51,10 @@ public class Gift implements Serializable
 	}
 	
 
-	public Gift(String name, String details, List<String> shopLinks, User owner) {
+	public Gift(String name, String brand, String details, List<String> shopLinks, User owner) {
 		super();
 		this.name = name;
+		this.brand = brand;
 		this.details = details;
 		this.shopLinks = shopLinks;
 		this.owner = owner;
@@ -74,6 +78,16 @@ public class Gift implements Serializable
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+
+	public String getBrand() {
+		return brand;
+	}
+
+
+	public void setBrand(String brand) {
+		this.brand = brand;
 	}
 
 

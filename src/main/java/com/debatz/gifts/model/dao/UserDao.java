@@ -1,7 +1,10 @@
 package com.debatz.gifts.model.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +29,12 @@ public class UserDao
         this.em.merge(person);
         return person.getUsername();
     }
+	
+	@Transactional
+	public List<User> getUsers() {
+		Query query = this.em.createQuery("select u from User u");
+		return (List<User>) query.getResultList();
+	}
 
 	@Transactional(readOnly = true)
 	public User findByUserName(String username) 

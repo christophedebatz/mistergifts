@@ -52,6 +52,22 @@ public class MainController
 	
 	
 	
+	@RequestMapping(value = "/family", method = RequestMethod.GET)
+	public ModelAndView familyPage() 
+	{		
+		ModelAndView model = new ModelAndView();
+		
+		List<User> users = this.userDao.getUsers();
+		model.addObject("users", users);
+		model.setViewName("family");
+		
+		return model;
+	}
+	
+	
+	
+	
+	
 	@RequestMapping(value = "/mylist", method = RequestMethod.GET)
 	public ModelAndView myListPage() 
 	{		
@@ -93,10 +109,18 @@ public class MainController
 	@RequestMapping(value = "/mylist", method = RequestMethod.POST)
 	public ModelAndView myListPageUpdate(
 			@RequestParam(value="name", required=true) String name,
+			@RequestParam(value="brand", required=true) String brand,
 			@RequestParam(value="details", required=false) String details,
 			@RequestParam(value="shoplink", required=false) List<String> shoplinks) 
 	{
-		Gift gift = new Gift(name, details, shoplinks, this.sessionBean.getCurrentUser());
+		Gift gift = new Gift(
+			name.substring(0, 1).toUpperCase() + name.substring(1), 
+			brand.toUpperCase(), 
+			details.substring(0, 1).toUpperCase() + details.substring(1),
+			shoplinks, 
+			this.sessionBean.getCurrentUser()
+		);
+		
 		this.giftDao.save(gift); 
 		
 		User user = this.sessionBean.getCurrentUser();

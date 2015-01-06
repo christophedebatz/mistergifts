@@ -38,6 +38,10 @@
 		</c:choose>
 			
 	</fieldset>
+	
+	<p style="text-align: right;">
+		<button onclick="window.location='<c:url value="/mylist" />';" class="btn btn-default">Back to gift list</button>
+	</p>
 		
   </div>
 </div>

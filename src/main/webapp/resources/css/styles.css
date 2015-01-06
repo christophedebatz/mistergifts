@@ -22,8 +22,13 @@ body {
   color: #CCC;
 }
 
+.overflow {
+  	max-height: 500px;
+  	overflow-x: auto;
+}
+
 .container a {
-	font-size: 18px;
+	font-size: 16px;
 	font-family: 'Montserrat', sans-serif;
 }
 
