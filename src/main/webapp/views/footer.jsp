@@ -4,7 +4,7 @@
 			
 			<div id="footer">
 	      <div class="container">
-	        <p class="text-muted credit">Developed in Java by <a href="http://github.com/christophedebatz" target="_blank">Christophe de Batz</a>.</p>
+	        <p class="text-muted credit">Developed in Java by <a href="http://github.com/christophedebatz" target="_blank">Christophe de Batz</a>. Connect you as an <a href="<c:url value="/admin" />">admin</a>.</p>
 	      </div>
 	    </div>
 	

@@ -45,6 +45,12 @@ body {
 }
 
 
+@media (max-width: 1400px) {
+	.rubban {
+		display: none;
+	}
+}
+
 /* Custom page CSS
 -------------------------------------------------- */
 /* Not required for template or sticky footer method. */

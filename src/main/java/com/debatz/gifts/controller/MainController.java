@@ -20,6 +20,7 @@ import com.debatz.gifts.model.Gift;
 import com.debatz.gifts.model.User;
 import com.debatz.gifts.model.dao.GiftDao;
 import com.debatz.gifts.model.dao.UserDao;
+import com.debatz.gifts.service.SlugService;
  
 @Controller
 public class MainController 
@@ -52,13 +53,29 @@ public class MainController
 	
 	
 	
+	@RequestMapping(value = { "/admin" }, method = RequestMethod.GET)
+	public ModelAndView adminHomePage() {
+ 
+	  ModelAndView model = new ModelAndView();
+	  model.setViewName("adminHome");
+	  
+	  return model;
+	}
+	
+	
+	
+	
+	
 	@RequestMapping(value = "/family", method = RequestMethod.GET)
 	public ModelAndView familyPage() 
 	{		
 		ModelAndView model = new ModelAndView();
+		String currentUsername = this.sessionBean.getCurrentUser().getUsername();
 		
-		List<User> users = this.userDao.getUsers();
+		List<User> users = this.userDao.getUsers(currentUsername);
+		model.addObject("hasGift", this.giftDao.giftsExist(currentUsername));
 		model.addObject("users", users);
+		
 		model.setViewName("family");
 		
 		return model;
@@ -109,26 +126,17 @@ public class MainController
 	
 	
 	
-	@RequestMapping(value = "/mylist/{giftId}", method = RequestMethod.GET)
-	public ModelAndView myListGiftPage(@PathVariable(value="giftId") final int giftId) 
+	
+	@RequestMapping(value = "/gift/{slug}", method = RequestMethod.GET)
+	public ModelAndView myListGiftPage(@PathVariable(value="slug") final String slug) 
 	{
 		ModelAndView model = new ModelAndView();
-		List<Gift> gifts = this.sessionBean.getCurrentUser().getOwnedGifts();
-		Gift selectedGift = null;
 		
-		for (Gift gift : gifts) {
-			if (gift.getId() == giftId) {
-				selectedGift = gift;
-				break;
-			}
-		}
-		
-		model.addObject("selectedGift", selectedGift);
+		model.addObject("selectedGift", this.giftDao.findGift(slug));
 		model.setViewName("giftDetails");
 		
 		return model;
 	}
-	
 	
 	
 	
@@ -142,6 +150,7 @@ public class MainController
 	{
 		Gift gift = new Gift(
 			name.substring(0, 1).toUpperCase() + name.substring(1), 
+			SlugService.getSlug(brand + " " + name),
 			brand.toUpperCase(), 
 			details.substring(0, 1).toUpperCase() + details.substring(1),
 			shoplinks, 
@@ -182,17 +191,25 @@ public class MainController
 	
  
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public ModelAndView login(@RequestParam(value = "error", required = false) String error,
-		@RequestParam(value = "logout", required = false) String logout) {
+	public ModelAndView login(
+			@RequestParam(value = "error", required = false) String error,
+			@RequestParam(value = "denied", required = false) String denied,
+			@RequestParam(value = "logout", required = false) String logout) {
  
 	  ModelAndView model = new ModelAndView();
+	  
 	  if (error != null) {
-		model.addObject("error", "Invalid username and password!");
+		  model.addObject("error", "Invalid username and password!");
+	  }
+	  
+	  if (denied != null) {
+		  model.addObject("error", "You have not enough permission to access this area. ");
 	  }
  
 	  if (logout != null) {
 		model.addObject("msg", "You've been logged out successfully.");
 	  }
+	  
 	  model.setViewName("login");
  
 	  return model;

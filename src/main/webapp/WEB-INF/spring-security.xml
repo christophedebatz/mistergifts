@@ -8,34 +8,31 @@
  
 	<http auto-config="true" use-expressions="true" create-session="ifRequired">
  
-	 	<session-management invalid-session-url="/403">
-	        <concurrency-control max-sessions="2" expired-url="/403" />
+	 	<session-management invalid-session-url="/login">
+	        <concurrency-control max-sessions="2" expired-url="/login" />
 	    </session-management>
     
 		<intercept-url pattern="/admin**" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/mylist**" access="hasRole('ROLE_USER')" />
+		<intercept-url pattern="/family**" access="hasRole('ROLE_USER')" />
+		<intercept-url pattern="/gift**" access="hasRole('ROLE_USER')" />
 		<intercept-url pattern="/mylist/**" access="hasRole('ROLE_USER')" />
  
-		<!-- access denied page -->
-		<!-- <access-denied-handler error-page="/403" /> -->
+		<access-denied-handler error-page="/login?denied" />
  
 		<form-login 
 		    login-page="/login" 
 		    default-target-url="/mylist" 
 			authentication-failure-url="/login?error" 
-			username-parameter="username"
+			username-parameter="username" 
 			password-parameter="password" />
+			
 		<logout logout-success-url="/login?logout" />
 		
 		<csrf/>
 		
 	</http>
- 
-	<!-- <authentication-manager>
-	  <authentication-provider>
-		<jdbc-user-service data-source-ref="dataSource" users-by-username-query="select username,password, enabled from users where username=?" authorities-by-username-query="select username, role from user_roles where username =?" />
-	  </authentication-provider>
-	</authentication-manager> -->
 	
 	<authentication-manager>
 		<authentication-provider user-service-ref="customUserDetailsService" >

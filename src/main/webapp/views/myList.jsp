@@ -3,7 +3,9 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
-<jsp:include page="header.jsp"></jsp:include>
+<jsp:include page="header.jsp">
+	<jsp:param name="currentTab" value="myList" />
+</jsp:include>
 
 
 <div class="container">
@@ -37,11 +39,11 @@
 					  		
 					  		<c:forEach items="${user.ownedGifts}" var="gift">
 						  	
-						  		<tr style="cursor: pointer;" onclick="window.location='./mylist/${gift.id}';">
-							  		<td><a href="<c:url value="/mylist/${gift.id}" />">${gift.name}</a></td>
+						  		<tr style="cursor: pointer;" onclick="window.location='./gift/${gift.slug}';">
+							  		<td><a href="<c:url value="/gift/${gift.slug}" />">${gift.name}</a></td>
 							  		<td>${fn:substring(gift.brand, 0, 10)}</td>
 							  		<td>${fn:substring(gift.details, 0, 50)}...</td>
-							  		<td><button class="btn btn-xs btn-danger" onclick="window.location='<c:url value="/mylist/${gift.id}?remove" />';">Remove</button></td>
+							  		<td><button class="btn btn-xs btn-danger" onclick="window.location='<c:url value="/gift/${gift.id}?remove" />';">Remove</button></td>
 						  		</tr>
 						  		
 					  		</c:forEach>
@@ -69,7 +71,7 @@
 			  	</div>
 			  	
 			  	<div class="form-group">
-				    <input type="text" name="details" class="form-control" placeholder="Details..." />
+				    <textarea name="details" class="form-control" placeholder="Details..."></textarea>
 			  	</div>
 			  	
 			  	<div style="float:right; margin-bottom: 10px;" class="btn-group">

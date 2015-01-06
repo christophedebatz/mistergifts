@@ -1,5 +1,6 @@
 package com.debatz.gifts.model.dao;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -33,7 +34,23 @@ public class UserDao
 	@Transactional
 	public List<User> getUsers() {
 		Query query = this.em.createQuery("select u from User u");
-		return (List<User>) query.getResultList();
+		try {
+			return (List<User>) query.getResultList();
+		} catch (Exception ex) {
+			return null;
+		}
+	}
+	
+	@Transactional
+	public List<User> getUsers(String... unlessNames) {
+		Query query = this.em.createQuery("select u from User u where u.username not in :names", User.class);
+		query.setParameter("names", Arrays.asList(unlessNames));
+		
+		try {
+			return (List<User>) query.getResultList();
+		} catch (Exception ex) {
+			return null;
+		}
 	}
 
 	@Transactional(readOnly = true)

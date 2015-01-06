@@ -14,9 +14,9 @@
     </a>
     
     <ul class="nav navbar-nav">
-      <li><a href="<c:url value="/family" />" data-toggle="tooltip" data-placement="bottom" title="See the family gifts list">Family lists</a></li>
-      <li><a href="<c:url value="/mylist" />" data-toggle="tooltip" data-placement="bottom" title="See your gifts list">My List</a></li>
-      <li><a href="<c:url value="/about" />" data-toggle="tooltip" data-placement="bottom" title="See who I am">About</a></li>
+      <li<c:if test="${param.currentTab eq 'family'}"> class="active"</c:if>><a href="<c:url value="/family" />"<c:if test="${param.currentTab ne 'family'}"> data-toggle="tooltip" data-placement="bottom" title="See the family gifts list"</c:if>>Family list</a></li>
+      <li<c:if test="${param.currentTab eq 'myList'}"> class="active"</c:if>><a href="<c:url value="/mylist" />"<c:if test="${param.currentTab ne 'myList'}"> data-toggle="tooltip" data-placement="bottom" title="See your gifts list"</c:if>>My List</a></li>
+      <li<c:if test="${param.currentTab eq 'about'}"> class="active"</c:if>><a href="<c:url value="/about" />"<c:if test="${param.currentTab ne 'about'}"> data-toggle="tooltip" data-placement="bottom" title="See who I am"</c:if>>About</a></li>
     </ul>
     
     <ul class="nav pull-right navbar-nav">

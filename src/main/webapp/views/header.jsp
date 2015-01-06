@@ -24,7 +24,7 @@
 	</head>
 	<body>
 	
-	<img src="<c:url value="/resources/pictures/rubban.png" />" style="z-index: 1000; position: absolute; top: 0; left: 0;" />
+	<img class="rubban" src="<c:url value="/resources/pictures/rubban.png" />" style="z-index: 1000; position: absolute; top: 0; left: 0;" />
 
 		<div id="wrap">
 

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <jsp:include page="header.jsp"></jsp:include>
 
@@ -23,7 +24,7 @@
 						<h4><span class="label label-default">Shop links</span></h4>
 						<ul style="list-style-type: none;">
 							<c:forEach items="${selectedGift.shopLinks}" var="link">
-								<li><span class="glyphicon glyphicon-link"> <a class="link-list" href="${link}" target="_blank">${link}</a></span></li>
+								<li><span class="glyphicon glyphicon-link"> <a class="link-list" href="${link}" target="_blank">${fn:substring(link, 0, 90)}...</a></span></li>
 							</c:forEach>
 						</ul>
 					</c:if>
@@ -40,7 +41,7 @@
 	</fieldset>
 	
 	<p style="text-align: right;">
-		<button onclick="window.location='<c:url value="/mylist" />';" class="btn btn-default">Back to gift list</button>
+		<button onclick="javascript: history.back();" class="btn btn-default">Back to list</button>
 	</p>
 		
   </div>

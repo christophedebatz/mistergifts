@@ -45,6 +45,10 @@
 				
 					<div class="alert alert-info" role="alert">You are already connected as <b>${pageContext.request.userPrincipal.name}</b>.</div>
 					
+					<c:if test="${not empty error}">
+						<div class="alert alert-danger" role="alert">${error}</div>
+					</c:if>
+					
 				</c:otherwise>
 			</c:choose>
 			

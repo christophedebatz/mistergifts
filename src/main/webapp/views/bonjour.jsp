@@ -14,7 +14,7 @@
     </p>
     
     <p style="margin-top: 50px; text-align: center;">
-    	<a class="btn btn-lg btn-success" href="<c:url value="/mylist" />">Begin my own list</a>
+    	<a class="btn btn-lg btn-primary" href="<c:url value="/mylist" />">Begin my own list</a>
     </p>
     
   </div>
