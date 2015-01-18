@@ -27,6 +27,10 @@ body {
   	overflow-x: auto;
 }
 
+.container fieldset legend {
+	font-size: 15px;
+}
+
 .container a {
 	font-size: 16px;
 	font-family: 'Montserrat', sans-serif;

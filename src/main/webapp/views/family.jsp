@@ -41,7 +41,7 @@
 						  	<th>User name</th>
 						  	<th>Gift name</th>
 						  	<th>Gift brand</th>
-						  	<th>&nbsp;</th>
+						  	<th>Booker</th>
 						  </tr>
 				  		</thead>
 				  		<tbody>
@@ -55,8 +55,15 @@
 				  		
 					  		<c:forEach items="${user.ownedGifts}" var="gift">
 					  		
-						  		<tr class="${currentRawClass}">
-				
+						  		<c:choose>
+						  			<c:when test="${gift.booker ne null}">
+							  			<tr class="default">
+							  		</c:when>
+							  		<c:otherwise>
+							  			<tr class="${currentRawClass}">
+							  		</c:otherwise>
+						  		</c:choose>
+						  		
 									<td>
 										  		
 						  			<c:choose>
@@ -73,20 +80,38 @@
 					  				<td><a href="<c:url value="/gift/${gift.slug}" />">${gift.name}</a></td>
 					  				<td>${gift.brand}</td>
 					  				<td>
-					  					<form action="<c:url value="/family/booking" />" method="post">
-					  						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-					  						<input type="hidden" name="giftId" value="${gift.id}" />
-					  						<input type="submit" class="btn btn-xs ${currentButtonClass}" value="Book" />
-				  						</form>
+						  				<c:choose>
+						  					<c:when test="${empty gift.booker}">
+							  					<form action="<c:url value="/family/booking" />" method="post">
+							  						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+							  						<input type="hidden" name="giftId" value="${gift.id}" />
+							  						<input type="submit" class="btn btn-xs ${currentButtonClass}" value="Book" />
+						  						</form>
+					  						</c:when>
+					  						<c:otherwise>
+					  							<c:choose>
+					  								<c:when test="${gift.booker.username eq pageContext.request.userPrincipal.name}">
+					  									<form action="<c:url value="/family/booking" />" method="post">
+									  						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+									  						<input type="hidden" name="giftId" value="${gift.id}" />
+									  						<input type="submit" class="btn btn-xs btn-default" value="Unbook" />
+								  						</form>
+					  								</c:when>
+					  								<c:otherwise>
+					  									${gift.booker.username}
+					  								</c:otherwise>
+				  								</c:choose>
+					  						</c:otherwise>
+				  						</c:choose>
 					  				</td>
 							  	
 							  	</tr>
 							  	
 							  	<c:set var="currentGift" value="${currentGift + 1}" />
-						  	
+							  	
 						  	</c:forEach>
 						  	
-						  	<c:choose>
+				  			<c:choose>
 						  		<c:when test="${currentButtonClass eq 'btn-success' }">
 						  			<c:set var="currentButtonClass" value="btn-primary" />
 						  			<c:set var="currentRawClass" value="info" />

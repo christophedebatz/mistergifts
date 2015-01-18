@@ -10,16 +10,18 @@
   
     <a class="navbar-brand" href="<c:url value="/" />" data-toggle="tooltip" data-placement="bottom" title="Home">
     	<img src="<c:url value="/resources/pictures/rsz_gift.png" />" />
-    	&nbsp; MisterGifts
+    	&nbsp; Mister Gifts
     </a>
     
     <ul class="nav navbar-nav">
-      <li<c:if test="${param.currentTab eq 'family'}"> class="active"</c:if>><a href="<c:url value="/family" />"<c:if test="${param.currentTab ne 'family'}"> data-toggle="tooltip" data-placement="bottom" title="See the family gifts list"</c:if>>Family list</a></li>
+    <c:if test="${not empty pageContext.request.userPrincipal.name}">
+      <li<c:if test="${param.currentTab eq 'family'}"> class="active"</c:if>><a href="<c:url value="/family" />"<c:if test="${param.currentTab ne 'family'}"> data-toggle="tooltip" data-placement="bottom" title="See the family gifts list"</c:if>>Their list</a></li>
       <li<c:if test="${param.currentTab eq 'myList'}"> class="active"</c:if>><a href="<c:url value="/mylist" />"<c:if test="${param.currentTab ne 'myList'}"> data-toggle="tooltip" data-placement="bottom" title="See your gifts list"</c:if>>My List</a></li>
+     </c:if>
       <li<c:if test="${param.currentTab eq 'about'}"> class="active"</c:if>><a href="<c:url value="/about" />"<c:if test="${param.currentTab ne 'about'}"> data-toggle="tooltip" data-placement="bottom" title="See who I am"</c:if>>About</a></li>
     </ul>
     
-    <ul class="nav pull-right navbar-nav">
+    <ul class="nav navbar-nav pull-right">
     
     <c:choose>
     	<c:when test="${pageContext.request.userPrincipal.name == null}">

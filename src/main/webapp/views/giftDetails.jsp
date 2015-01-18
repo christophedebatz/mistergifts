@@ -24,7 +24,7 @@
 						<h4><span class="label label-default">Shop links</span></h4>
 						<ul style="list-style-type: none;">
 							<c:forEach items="${selectedGift.shopLinks}" var="link">
-								<li><span class="glyphicon glyphicon-link"> <a class="link-list" href="${link}" target="_blank">${fn:substring(link, 0, 90)}...</a></span></li>
+								<li><span class="glyphicon glyphicon-link"> <a class="link-list" href="${link}" target="_blank">${fn:substring(link, 0, 80)}...</a></span></li>
 							</c:forEach>
 						</ul>
 					</c:if>
@@ -41,7 +41,7 @@
 	</fieldset>
 	
 	<p style="text-align: right;">
-		<button onclick="javascript: history.back();" class="btn btn-default">Back to list</button>
+		<button onclick="javascript: history.back();" class="btn btn-default">Back previous</button>
 	</p>
 		
   </div>

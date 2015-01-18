@@ -1,6 +1,5 @@
 package com.debatz.gifts.controller;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,22 +86,45 @@ public class MainController
 	
 	
 	@RequestMapping(value = "/family/booking", method = RequestMethod.POST)
-	public ModelAndView familyBookingPage(@RequestParam(value="giftId", required=true) int giftId)
+	public ModelAndView familyBookingPage(
+			@RequestParam(value="giftId", required=true) int giftId,
+			@RequestParam(value="action", required=false) String action)
 	{
 		ModelAndView model = new ModelAndView();
+		model.setViewName("booking");
+		
 		Gift giftToBook = this.giftDao.findGift(giftId);
 		
 		if (giftToBook != null) 
 		{
-			this.sessionBean.getCurrentUser().addBookedGift(giftToBook);
 			User currentUser = this.sessionBean.getCurrentUser();
-			this.userDao.update(currentUser);
+			
+			if (action != null && action.equalsIgnoreCase("completeBooking")) 
+			{
+				currentUser.addBookedGift(giftToBook);
+				giftToBook.setBooker(currentUser);
+				
+				this.userDao.update(currentUser);
+				this.giftDao.update(giftToBook);
+				
+				model.addObject("response", "booked");
+			}
+			
+			else if (giftToBook.getBooker() != null && giftToBook.getBooker().getUsername().equals(currentUser.getUsername()))
+			{
+				List<Gift> currentBooking = currentUser.getBookedGifts();
+				currentBooking.remove(giftToBook);
+				giftToBook.setBooker(null);
+				
+				this.userDao.update(currentUser);
+				this.giftDao.update(giftToBook);
+				
+				model.setViewName("redirect:/family");
+			}
 			
 			model.addObject("user", currentUser);
 			model.addObject("gift", giftToBook);
 		}
-		
-		model.setViewName("booking");
 		
 		return model;
 	}

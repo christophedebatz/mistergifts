@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.debatz.gifts.model.Gift;
-import com.debatz.gifts.model.User;
 
 @Repository
 public class GiftDao
