@@ -23,10 +23,10 @@ public class AuthenticationListener implements ApplicationListener<Authenticatio
 	{
         UserDetails userDetails = (UserDetails) event.getAuthentication().getPrincipal();
         
-        User user = this.userDao.findByUserName(userDetails.getUsername());
-        user.getOwnedGifts().size();
-        user.getBookedGifts().size();
+//        User user = this.userDao.findByUserName(userDetails.getUsername());
+//        user.getOwnedGifts().size();
+//        user.getBookedGifts().size();
         
-        this.sessionBean.setCurrentUser(user);
+        this.sessionBean.setUsername(userDetails.getUsername());
 	}
 }

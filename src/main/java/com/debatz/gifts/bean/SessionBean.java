@@ -14,14 +14,14 @@ public class SessionBean implements Serializable
 {
 	private static final long serialVersionUID = 2703133079609785348L;
 	
-	private User currentUser;
+	private String username;
+	
 
-    
-	public User getCurrentUser() {
-		return currentUser;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setCurrentUser(User currentUser) {
-		this.currentUser = currentUser;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 }

@@ -8,6 +8,7 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.eclipse.persistence.sessions.Session;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +32,21 @@ public class GiftDao
         this.em.merge(gift);
         return gift.getId();
     }
+	
+	@Transactional
+	public int getNextSequence() {
+		
+		// eclipselink specialty
+		return this.em.unwrap(Session.class)
+				.getNextSequenceNumberValue(Gift.class)
+				.intValue();
+	}
+	
+	@Transactional
+	public boolean remove(Gift gift) {
+		this.em.remove(this.em.getReference(Gift.class, gift.getId()));
+		return true;
+	}
 	
 	@Transactional(readOnly = true)
 	public Gift findGift(Integer id) {	

@@ -10,7 +10,7 @@
 
 <div class="container">
   <div class="jumbotron">
-    <h2>Family gifts lists</h2>
+    <h2>Their gifts lists</h2>
 
 	<fieldset>
 		<legend>List per user</legend>

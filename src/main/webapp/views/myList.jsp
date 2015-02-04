@@ -15,7 +15,7 @@
 		<h4>List</h4>
 
 		<c:choose>
-			<c:when test="${ empty user.ownedGifts }">
+			<c:when test="${fn:length(user.ownedGifts) <= 0 }">
 
 				<div class="alert alert-info" role="alert">
 					<p>Your current gift list is still empty yet...</p>
@@ -38,15 +38,46 @@
 
 						<c:forEach items="${user.ownedGifts}" var="gift">
 
-							<tr style="cursor: pointer;" onclick="window.location='./gift/${gift.slug}';">
-								<td><a href="<c:url value="/gift/${gift.slug}" />">${gift.name}</a></td>
-								<td>${fn:substring(gift.brand, 0, 10)}</td>
-								<td>${fn:substring(gift.details, 0, 50)}...</td>
+							<tr>
+								<td><a href="<c:url value="/gift/${gift.slug}" />">
+									<c:choose>
+										<c:when test="${fn:length(gift.name) > 20 }">
+											${fn:substring(gift.name, 0, 20)}...
+										</c:when>
+										<c:otherwise>
+											${gift.name}
+										</c:otherwise>
+									</c:choose>
+								</a></td>
+								<td>
+									<c:choose>
+										<c:when test="${fn:length(gift.brand) > 20 }">
+											${fn:substring(gift.brand, 0, 20)}...
+										</c:when>
+										<c:otherwise>
+											${gift.brand}
+										</c:otherwise>
+									</c:choose>
+								</td>
+								<td>
+									<c:choose>
+										<c:when test="${fn:length(gift.details) > 47 }">
+											${fn:substring(gift.details, 0, 47)}...
+										</c:when>
+										<c:otherwise>
+											${gift.details}
+										</c:otherwise>
+									</c:choose>
+								</td>
 								<td>
 									<c:choose>
 										<c:when test="${gift.booker ne null}">Not removable</c:when>
 										<c:otherwise>
-											<button class="btn btn-xs btn-danger" onclick="window.location='<c:url value="/gift/${gift.id}?remove" />';">Remove</button>
+											<form action="<c:url value="/gift" />" method="post">
+												<input type="hidden" name="giftId" value="${gift.id}" />
+												<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+												<input type="submit" class="btn btn-xs btn-danger" value="Remove" />
+											</form>
 										</c:otherwise>
 									</c:choose>
 									
@@ -62,9 +93,10 @@
 
 		</c:choose>
 
+		<p>&nbsp;</p>
+
 		<img src="<c:url value="/resources/pictures/gifts.png" />"
 			style="float: right;" />
-
 
 		<h4>New gift</h4>
 		<form action="<c:url value="/mylist" />" method="post"
@@ -117,7 +149,7 @@
 					value="${_csrf.token}" />
 			</fieldset>
 
-			<button class="btn btn-large btn-primary">Add this gift</button>
+			<input type="submit" value="Validate" class="btn btn-large btn-primary" />
 
 		</form>
 

@@ -4,6 +4,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,16 +16,25 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "USER_ROLES",
+@Table(name = "USER_ROLES", 
 	uniqueConstraints = @UniqueConstraint(
-		columnNames = { "role", "username" }))
+			columnNames = { "role", "username" })
+)
 public class UserRole implements Serializable
 {
 
 	private static final long serialVersionUID = 8043295643963444097L;
 	
+	@Id
+	@GeneratedValue(strategy = IDENTITY)
+	@Column(name = "user_role_id", unique = true, nullable = false)
 	private Integer id;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "username", nullable = false)
 	private User user;
+	
+	@Column(name = "role", nullable = false, length = 45)
 	private String role;
 	
  
@@ -36,10 +46,6 @@ public class UserRole implements Serializable
 		this.role = role;
 	}
  
-	@Id
-	@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "user_role_id", 
-		unique = true, nullable = false)
 	public Integer getUserRoleId() {
 		return this.id;
 	}
@@ -48,8 +54,6 @@ public class UserRole implements Serializable
 		this.id = userRoleId;
 	}
  
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "username", nullable = false)
 	public User getUser() {
 		return this.user;
 	}
@@ -58,7 +62,6 @@ public class UserRole implements Serializable
 		this.user = user;
 	}
  
-	@Column(name = "role", nullable = false, length = 45)
 	public String getRole() {
 		return this.role;
 	}

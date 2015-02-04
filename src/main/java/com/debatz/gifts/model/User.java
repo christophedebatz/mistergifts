@@ -31,13 +31,13 @@ public class User implements Serializable
 	@Column(name = "enabled", nullable = false)
     private boolean enabled;
     
-    @OneToMany(mappedBy="owner", fetch = FetchType.EAGER, cascade=CascadeType.PERSIST)
+    @OneToMany(mappedBy="owner", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Gift> ownedGifts = new ArrayList<Gift>();
    
-    @OneToMany(mappedBy="booker", fetch = FetchType.EAGER, cascade=CascadeType.PERSIST)
+    @OneToMany(mappedBy="booker", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Gift> bookedGifts = new ArrayList<Gift>();
     
-    @OneToMany(mappedBy = "user", cascade=CascadeType.PERSIST)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<UserRole> roles = new ArrayList<UserRole>(0);
     
     
@@ -118,5 +118,24 @@ public class User implements Serializable
 
 	public void setRoles(List<UserRole> roles) {
 		this.roles = roles;
+	}
+
+	@Override
+	public String toString() {
+		
+		String booked = null;
+		String owned  = null;
+		
+		for (Gift g : this.bookedGifts) {
+			booked += g.getName() + ",";
+		}
+		
+		for (Gift g : this.ownedGifts) {
+			owned += g.getName() + ",";
+		}
+		
+		return "User [username=" + username + ", password=" + password
+				+ ", enabled=" + enabled + ", ownedGifts=" + owned
+				+ ", bookedGifts=" + booked + ", roles=" + roles + "]";
 	}
 }

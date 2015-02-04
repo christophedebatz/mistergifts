@@ -15,6 +15,13 @@
 		<c:choose>
 			<c:when test="${selectedGift != null}">
 				<legend>${selectedGift.name}</legend>
+				
+				<c:if test="${not empty selectedGift.picture}">
+					<img src="${selectedGift.picture}" title="${selectedGift.brand} ${selectedGift.name}" style="float: right;" />
+				</c:if>
+
+				<h4><span class="label label-default">Brand</span></h4>
+				<p>${selectedGift.brand}</p>
 
 				<h4><span class="label label-default">Details</span></h4>
 				<p>${selectedGift.details}</p>

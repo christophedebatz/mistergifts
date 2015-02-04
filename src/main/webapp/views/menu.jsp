@@ -1,7 +1,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page session="true"%>
 
-<form action="<c:url value="/j_spring_security_logout" />" method="post" id="logoutForm">
+<form action="<c:url value="/logout" />" method="post" id="logoutForm">
 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 </form>
 
@@ -25,7 +25,7 @@
     
     <c:choose>
     	<c:when test="${pageContext.request.userPrincipal.name == null}">
-	    	<li><a href="<c:url value="/login" />" data-toggle="tooltip" data-placement="bottom" title="Log in to share list">Log in</a></li>
+	    	<li<c:if test="${param.currentTab eq 'login'}"> class="active"</c:if>><a href="<c:url value="/login" />" data-toggle="tooltip" data-placement="bottom" title="Log in to share list">Log in</a></li>
     	</c:when>
     	
     	<c:otherwise>

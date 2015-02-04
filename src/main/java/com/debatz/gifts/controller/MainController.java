@@ -1,12 +1,11 @@
 package com.debatz.gifts.controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,8 +16,10 @@ import org.springframework.web.servlet.ModelAndView;
 import com.debatz.gifts.bean.SessionBean;
 import com.debatz.gifts.model.Gift;
 import com.debatz.gifts.model.User;
+import com.debatz.gifts.model.UserRole;
 import com.debatz.gifts.model.dao.GiftDao;
 import com.debatz.gifts.model.dao.UserDao;
+import com.debatz.gifts.service.FileService;
 import com.debatz.gifts.service.SlugService;
  
 @Controller
@@ -52,11 +53,45 @@ public class MainController
 	
 	
 	
+	
 	@RequestMapping(value = { "/admin" }, method = RequestMethod.GET)
 	public ModelAndView adminHomePage() {
  
 	  ModelAndView model = new ModelAndView();
 	  model.setViewName("adminHome");
+	  
+	  return model;
+	}
+	
+	
+	@RequestMapping(value = { "/admin" }, method = RequestMethod.POST)
+	public ModelAndView adminHomeAddUserPage(
+			@RequestParam(value="username", required=true) String username,
+			@RequestParam(value="password", required=true) String password,
+			@RequestParam(value="user_role", required=false) String role) {
+ 
+		if (role == null) {
+			role = "ROLE_USER";
+		}
+		
+		BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder();
+		password = bCrypt.encode(password);
+		
+		User newUser = new User(username, password, true);
+		UserRole newUserRole = new UserRole(newUser, role);
+		newUser.setRoles(Arrays.asList(newUserRole));
+		
+		ModelAndView model = new ModelAndView();
+		
+		try {
+			this.userDao.save(newUser);
+		} 
+		catch (Exception ex) {
+			model.addObject("error", "Error raised. " + ex.getMessage());
+		}
+		
+		model.addObject("error", "none");
+		model.setViewName("adminHome");
 	  
 	  return model;
 	}
@@ -69,7 +104,7 @@ public class MainController
 	public ModelAndView familyPage() 
 	{		
 		ModelAndView model = new ModelAndView();
-		String currentUsername = this.sessionBean.getCurrentUser().getUsername();
+		String currentUsername = this.sessionBean.getUsername();
 		
 		List<User> users = this.userDao.getUsers(currentUsername);
 		model.addObject("hasGift", this.giftDao.giftsExist(currentUsername));
@@ -97,7 +132,7 @@ public class MainController
 		
 		if (giftToBook != null) 
 		{
-			User currentUser = this.sessionBean.getCurrentUser();
+			User currentUser = this.userDao.findByUserName(this.sessionBean.getUsername());
 			
 			if (action != null && action.equalsIgnoreCase("completeBooking")) 
 			{
@@ -119,6 +154,8 @@ public class MainController
 				this.userDao.update(currentUser);
 				this.giftDao.update(giftToBook);
 				
+				currentUser.setBookedGifts(currentBooking);
+				
 				model.setViewName("redirect:/family");
 			}
 			
@@ -132,25 +169,8 @@ public class MainController
 	
 	
 	
-	
-	
-	@RequestMapping(value = "/mylist", method = RequestMethod.GET)
-	public ModelAndView myListPage() 
-	{		
-		ModelAndView model = new ModelAndView();
-		model.addObject("user", this.sessionBean.getCurrentUser());
-		model.setViewName("myList");
-		
-		return model;
-	}
-	
-	
-	
-	
-	
-	
 	@RequestMapping(value = "/gift/{slug}", method = RequestMethod.GET)
-	public ModelAndView myListGiftPage(@PathVariable(value="slug") final String slug) 
+	public ModelAndView myListGiftPage(@PathVariable(value="slug") final String slug)  
 	{
 		ModelAndView model = new ModelAndView();
 		
@@ -163,33 +183,75 @@ public class MainController
 	
 	
 	
+	@RequestMapping(value = "/gift", method = RequestMethod.POST)
+	public ModelAndView myListGiftPage(@RequestParam(value="giftId", required=true) int giftId) throws Exception
+	{
+		Gift giftToRemove = this.giftDao.findGift(giftId);
+		User currentUser = this.userDao.findByUserName(this.sessionBean.getUsername());
+		
+		if (giftToRemove != null && giftToRemove.getBooker() == null &&
+				currentUser.getUsername().equals(giftToRemove.getOwner().getUsername()))
+		{
+			List<Gift> userGifts = currentUser.getOwnedGifts();
+			
+			if (!userGifts.remove(giftToRemove)) {
+				throw new Exception("Unable to remove gift in user gifts list.");
+			}
+			
+			currentUser.setOwnedGifts(userGifts);
+			this.giftDao.remove(giftToRemove);
+			this.userDao.update(currentUser);
+		}
+		
+		ModelAndView model = new ModelAndView();
+		model.setViewName("redirect:/mylist");
+		
+		return model;
+	}
+	
+	
+	@RequestMapping(value = "/mylist", method = RequestMethod.GET)
+	public ModelAndView myListPage() 
+	{		
+		ModelAndView model = new ModelAndView();
+		User currentUser = this.userDao.findByUserName(this.sessionBean.getUsername());
+		model.addObject("user", currentUser);
+		model.setViewName("myList");
+		
+		return model;
+	}
+	
+	
 	@RequestMapping(value = "/mylist", method = RequestMethod.POST)
 	public ModelAndView myListPageUpdate(
 			@RequestParam(value="name", required=true) String name,
 			@RequestParam(value="brand", required=true) String brand,
 			@RequestParam(value="details", required=false) String details,
+			@RequestParam(value="picture", required=false) String picture,
 			@RequestParam(value="shoplink", required=false) List<String> shoplinks) 
 	{
-		Gift gift = new Gift(
-			name.substring(0, 1).toUpperCase() + name.substring(1), 
-			SlugService.getSlug(brand + " " + name),
-			brand.toUpperCase(), 
-			details.substring(0, 1).toUpperCase() + details.substring(1),
-			shoplinks, 
-			this.sessionBean.getCurrentUser()
+		if (!FileService.checkIfExists(picture)) {
+			picture = null;
+		}
+		
+		User currentUser = this.userDao.findByUserName(this.sessionBean.getUsername());
+		
+		currentUser.addOwnedGift(
+			new Gift(
+				name.substring(0, 1).toUpperCase() + name.substring(1), 
+				SlugService.getSlug(this.giftDao.getNextSequence() + " " + brand + " " + name),
+				brand.toUpperCase(), 
+				details.length() == 0 ? null : details.substring(0, 1).toUpperCase() + details.substring(1),
+				picture,
+				shoplinks, 
+				currentUser
+			)
 		);
 		
-		this.giftDao.save(gift); 
-		
-		User user = this.sessionBean.getCurrentUser();
-		user.addOwnedGift(gift);
-		this.userDao.update(user);
-		
-		this.sessionBean.setCurrentUser(user);
+		this.userDao.update(currentUser);
 		
 		ModelAndView model = new ModelAndView();
-		model.addObject("user", user);
-		model.setViewName("myList");
+		model.setViewName("redirect:/mylist");
 		
 		return model;
 	}
@@ -219,7 +281,7 @@ public class MainController
 			@RequestParam(value = "logout", required = false) String logout) {
  
 	  ModelAndView model = new ModelAndView();
-	  
+
 	  if (error != null) {
 		  model.addObject("error", "Invalid username and password!");
 	  }
@@ -237,28 +299,4 @@ public class MainController
 	  return model;
  
 	}
- 
-	
-	
-
-
-	
-	
-	@RequestMapping(value = "/403", method = RequestMethod.GET)
-	public ModelAndView accesssDenied() {
- 
-	  ModelAndView model = new ModelAndView();
- 
-	  //check if user is login
-	  Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	  if (!(auth instanceof AnonymousAuthenticationToken)) {
-		UserDetails userDetail = (UserDetails) auth.getPrincipal();	
-		model.addObject("username", userDetail.getUsername());
-	  }
- 
-	  model.setViewName("login");
-	  return model;
- 
-	}
- 
 }
