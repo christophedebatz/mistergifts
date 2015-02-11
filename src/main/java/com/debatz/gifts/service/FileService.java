@@ -13,8 +13,7 @@ public class FileService
 
 			return conn.getResponseCode() == HttpURLConnection.HTTP_OK;
 		} 
-		catch (Exception e) 
-		{
+		catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}

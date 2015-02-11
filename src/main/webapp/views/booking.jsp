@@ -2,7 +2,9 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<jsp:include page="header.jsp"></jsp:include>
+<jsp:include page="header.jsp">
+	<jsp:param name="currentTab" value="group" />
+</jsp:include>
 
 <div class="container">
   <div class="jumbotron">
@@ -32,14 +34,14 @@
 						
 					</fieldset>
 					
-					<form action="<c:url value="/family/booking" />" method="post">
+					<form action="<c:url value="/grouplist/booking" />" method="post">
 						
 						<input type="hidden" name="giftId" value="${gift.id}" />
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 						<input type="hidden" name="action" value="completeBooking" />
 					
 						<p style="text-align: right;">
-							<button onclick="window.location='<c:url value="/family" />'; return false;" class="btn btn-default">No</button>  
+							<button onclick="window.location='<c:url value="/grouplist" />'; return false;" class="btn btn-default">No</button>  
 							<input type="submit" value="Yes" class="btn btn-primary" />
 						</p>
 					</form>
@@ -52,7 +54,7 @@
 					</div>
 				
 					<p style="text-align: right;">
-						<button onclick="window.location='<c:url value="/family" />';" class="btn btn-default">Back to list</button> 
+						<button onclick="window.location='<c:url value="/grouplist" />';" class="btn btn-default">Back to list</button> 
 					</p>
 				</c:otherwise>
 			</c:choose>

@@ -1,6 +1,5 @@
 package com.debatz.gifts.controller;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -100,8 +99,8 @@ public class MainController
 	
 	
 	
-	@RequestMapping(value = "/family", method = RequestMethod.GET)
-	public ModelAndView familyPage() 
+	@RequestMapping(value = "/grouplist", method = RequestMethod.GET)
+	public ModelAndView groupPage() 
 	{		
 		ModelAndView model = new ModelAndView();
 		String currentUsername = this.sessionBean.getUsername();
@@ -110,7 +109,7 @@ public class MainController
 		model.addObject("hasGift", this.giftDao.giftsExist(currentUsername));
 		model.addObject("users", users);
 		
-		model.setViewName("family");
+		model.setViewName("group");
 		
 		return model;
 	}
@@ -120,8 +119,8 @@ public class MainController
 	
 	
 	
-	@RequestMapping(value = "/family/booking", method = RequestMethod.POST)
-	public ModelAndView familyBookingPage(
+	@RequestMapping(value = "/grouplist/booking", method = RequestMethod.POST)
+	public ModelAndView groupBookingPage(
 			@RequestParam(value="giftId", required=true) int giftId,
 			@RequestParam(value="action", required=false) String action)
 	{
@@ -156,7 +155,7 @@ public class MainController
 				
 				currentUser.setBookedGifts(currentBooking);
 				
-				model.setViewName("redirect:/family");
+				model.setViewName("redirect:/group");
 			}
 			
 			model.addObject("user", currentUser);

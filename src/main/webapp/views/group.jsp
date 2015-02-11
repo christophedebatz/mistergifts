@@ -4,7 +4,7 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <jsp:include page="header.jsp">
-	<jsp:param name="currentTab" value="family" />
+	<jsp:param name="currentTab" value="group" />
 </jsp:include>
 
 
@@ -82,7 +82,7 @@
 					  				<td>
 						  				<c:choose>
 						  					<c:when test="${empty gift.booker}">
-							  					<form action="<c:url value="/family/booking" />" method="post">
+							  					<form action="<c:url value="/grouplist/booking" />" method="post">
 							  						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 							  						<input type="hidden" name="giftId" value="${gift.id}" />
 							  						<input type="submit" class="btn btn-xs ${currentButtonClass}" value="Book" />
@@ -91,7 +91,7 @@
 					  						<c:otherwise>
 					  							<c:choose>
 					  								<c:when test="${gift.booker.username eq pageContext.request.userPrincipal.name}">
-					  									<form action="<c:url value="/family/booking" />" method="post">
+					  									<form action="<c:url value="/grouplist/booking" />" method="post">
 									  						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 									  						<input type="hidden" name="giftId" value="${gift.id}" />
 									  						<input type="submit" class="btn btn-xs btn-default" value="Unbook" />
