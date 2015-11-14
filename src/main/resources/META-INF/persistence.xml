@@ -4,17 +4,18 @@
   version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
  
     <persistence-unit name="mistergifts_unit" transaction-type="RESOURCE_LOCAL">
-	    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-	    <class>com.debatz.gifts.model.User</class>
-	    <class>com.debatz.gifts.model.Gift</class>
-	    <class>com.debatz.gifts.model.UserRole</class>
-	    <properties>
-		    <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
-		    <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/mistergifts?characterEncoding=utf8" />
-	     	<property name="javax.persistence.jdbc.user" value="root" />
-    		<property name="javax.persistence.jdbc.password" value="admin" />
-			<property name="eclipselink.ddl-generation" value="create-tables"/>
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <class>com.debatz.gifts.model.User</class>
+        <class>com.debatz.gifts.model.Gift</class>
+        <class>com.debatz.gifts.model.UserRole</class>
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/mistergifts?characterEncoding=utf8" />
+            <property name="javax.persistence.jdbc.user" value="root" />
+            <property name="javax.persistence.jdbc.password" value="admin" />
+            <property name="eclipselink.query-results-cache" value="false"/>
+            <property name="eclipselink.ddl-generation" value="none"/>
             <property name="eclipselink.ddl-generation.output-mode" value="database"/>
-	    </properties>
+        </properties>
      </persistence-unit>
 </persistence>
