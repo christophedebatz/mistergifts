@@ -155,7 +155,7 @@ public class MainController
 				
 				currentUser.setBookedGifts(currentBooking);
 				
-				model.setViewName("redirect:/group");
+				model.setViewName("redirect:/grouplist");
 			}
 			
 			model.addObject("user", currentUser);
