@@ -8,7 +8,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>mistergifts</name>
     <url>http://maven.apache.org</url>
-    
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jstl.version>1.2</jstl.version>
@@ -119,6 +119,18 @@
             <artifactId>jstl</artifactId>
             <version>1.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.4.1</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.4.1</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 
     <build>
@@ -136,7 +148,7 @@
                         <phase>package</phase>
                         <configuration>
                             <path>MisterGifts</path>
-                            <!-- optional, needed only if you want to use a preconfigured server.xml 
+                            <!-- optional, needed only if you want to use a preconfigured server.xml
                             file -->
                             <serverXml>src/main/tomcatconf/server.xml</serverXml>
                             <!-- optional values which can be configurable -->
@@ -156,10 +168,9 @@
                         -javaagent:${settings.localRepository}/org/springframework/spring-agent/2.5.6/spring-agent-2.5.6.jar
                         -javaagent:${settings.localRepository}/org/aspectj/aspectjweaver/1.6.1/aspectjweaver-1.8.0.jar
                     </argLine>
-                    <useSystemClassloader>true</useSystemClassloader>
                 </configuration>
             </plugin>
         </plugins>
-        <finalName>mister-gifts</finalName>
+        <finalName>mistergifts</finalName>
     </build>
 </project>

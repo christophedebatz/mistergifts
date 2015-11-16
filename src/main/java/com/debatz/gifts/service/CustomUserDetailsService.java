@@ -17,43 +17,41 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.debatz.gifts.model.UserRole;
 import com.debatz.gifts.model.dao.UserDao;
- 
 
- 
 @Service("userDetailsService")
-public class CustomUserDetailsService implements UserDetailsService 
-{
-	@Autowired
-	private UserDao userDao;
- 
-	@Transactional(readOnly=true)
-	@Override
-	public UserDetails loadUserByUsername(final String username) 
-		throws UsernameNotFoundException {
- 
-		com.debatz.gifts.model.User user = userDao.findByUserName(username);
-		List<GrantedAuthority> authorities = this.buildUserAuthority(user.getRoles());
- 
-		return buildUserForAuthentication(user, authorities);
- 
-	}
- 
-	private User buildUserForAuthentication(com.debatz.gifts.model.User user,  List<GrantedAuthority> authorities) {
-		return new User(user.getUsername(), user.getPassword(), 
-			user.isEnabled(), true, true, true, authorities);
-	}
- 
-	private List<GrantedAuthority> buildUserAuthority(List<UserRole> userRoles) {
- 
-		Set<GrantedAuthority> setAuths = new HashSet<GrantedAuthority>();
- 
-		for (UserRole userRole : userRoles) {
-			setAuths.add(new SimpleGrantedAuthority(userRole.getRole()));
-		}
- 
-		List<GrantedAuthority> Result = new ArrayList<GrantedAuthority>(setAuths);
- 
-		return Result;
-	}
- 
+public class CustomUserDetailsService implements UserDetailsService {
+
+    @Autowired
+    private UserDao userDao;
+
+    @Transactional(readOnly = true)
+    @Override
+    public UserDetails loadUserByUsername(final String username)
+            throws UsernameNotFoundException {
+
+        com.debatz.gifts.model.User user = userDao.findByUserName(username);
+        List<GrantedAuthority> authorities = this.buildUserAuthority(user.getRoles());
+
+        return buildUserForAuthentication(user, authorities);
+
+    }
+
+    private User buildUserForAuthentication(com.debatz.gifts.model.User user, List<GrantedAuthority> authorities) {
+        return new User(user.getUsername(), user.getPassword(),
+                user.isEnabled(), true, true, true, authorities);
+    }
+
+    private List<GrantedAuthority> buildUserAuthority(List<UserRole> userRoles) {
+
+        Set<GrantedAuthority> setAuths = new HashSet<GrantedAuthority>();
+
+        for (UserRole userRole : userRoles) {
+            setAuths.add(new SimpleGrantedAuthority(userRole.getRole()));
+        }
+
+        List<GrantedAuthority> Result = new ArrayList<GrantedAuthority>(setAuths);
+
+        return Result;
+    }
+
 }
