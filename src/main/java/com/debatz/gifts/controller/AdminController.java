@@ -14,7 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.Arrays;
 
 @Controller
-public class AdminController
+public class AdminController extends ControllerBase
 {
     @Autowired
     private UserDao userDao;

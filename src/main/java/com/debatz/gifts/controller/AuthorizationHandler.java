@@ -28,7 +28,7 @@ public class AuthorizationHandler implements AuthenticationSuccessHandler {
         String ip = ClientService.getClientAddr(request);
         String username = ((UserDetails)authentication.getPrincipal()).getUsername();
         
-        logger.info("User " + username + " has just logged in himself with IP = " + username);
+        logger.info("User " + username + " has just logged in himself with IP " + ip);
         
         RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
         redirectStrategy.sendRedirect(request, response, "/");

@@ -17,7 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 
 @Controller
-public class ListController
+public class ListController extends ControllerBase
 {
     @Autowired
     private SessionBean sessionBean;

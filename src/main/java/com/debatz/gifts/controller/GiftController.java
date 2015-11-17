@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 
 @Controller
-public class GiftController
+public class GiftController extends ControllerBase
 {
     @Autowired
     private SessionBean sessionBean;
