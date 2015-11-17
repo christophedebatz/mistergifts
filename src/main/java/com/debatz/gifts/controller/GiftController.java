@@ -39,7 +39,7 @@ public class GiftController
 
     @RequestMapping(value = "/gift", method = RequestMethod.POST)
     public ModelAndView myListGiftPage(@RequestParam(value = "giftId", required = true) int giftId) throws Exception {
-        Gift giftToRemove = this.giftDao.findGift(giftId);
+        Gift giftToRemove = this.giftDao.find(giftId);
         User currentUser = this.userDao.findByUserName(this.sessionBean.getUsername());
 
         if (giftToRemove != null && giftToRemove.getBooker() == null
@@ -51,7 +51,7 @@ public class GiftController
             }
 
             currentUser.setOwnedGifts(userGifts);
-            this.giftDao.remove(giftToRemove);
+            this.giftDao.remove(giftToRemove.getId());
             this.userDao.update(currentUser);
         }
 

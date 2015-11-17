@@ -49,7 +49,7 @@ public class ListController
         ModelAndView model = new ModelAndView();
         model.setViewName("booking");
 
-        Gift giftToBook = this.giftDao.findGift(giftId);
+        Gift giftToBook = this.giftDao.find(giftId);
 
         if (giftToBook != null) {
             User currentUser = this.userDao.findByUserName(this.sessionBean.getUsername());
