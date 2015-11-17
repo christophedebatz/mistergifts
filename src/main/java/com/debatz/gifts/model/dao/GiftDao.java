@@ -2,60 +2,23 @@ package com.debatz.gifts.model.dao;
 
 import java.util.Arrays;
 
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.NonUniqueResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import com.debatz.gifts.model.Gift;
 
-import org.eclipse.persistence.sessions.Session;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.debatz.gifts.model.Gift;
-
 @Repository
-public class GiftDao
+public class GiftDao extends AbstractDao<Gift, Integer>
 {
+	public GiftDao() {
+		super(Gift.class);
+	}
 
-	@PersistenceContext
-	private EntityManager em;
-    
-	@Transactional
-    public int save(Gift gift) {
-        this.em.persist(gift);
-        return gift.getId();
-    }
-	
-	@Transactional
-    public int update(Gift gift) {
-        this.em.merge(gift);
-        return gift.getId();
-    }
-	
-	@Transactional
-	public int getNextSequence() {
-		
-		// eclipselink specialty
-		return this.em.unwrap(Session.class)
-				.getNextSequenceNumberValue(Gift.class)
-				.intValue();
-	}
-	
-	@Transactional
-	public boolean remove(Gift gift) {
-		this.em.remove(this.em.getReference(Gift.class, gift.getId()));
-		return true;
-	}
-	
-	@Transactional(readOnly = true)
-	public Gift findGift(Integer id) {	
-		return this.em.find(Gift.class, id);
-	}
-	
 	@Transactional(readOnly = true)
 	public Gift findGift(String slug) {	
-		Query query = this.em.createQuery("select g from Gift g where g.slug = :slug", Gift.class);
+		Query query = this.em.createQuery("select g from Gift g where g.slug = :slug", this.entityClass);
 		query.setParameter("slug", slug);
 		
 		try {
@@ -67,30 +30,16 @@ public class GiftDao
 	
 	@Transactional(readOnly = true)
 	public boolean giftsExist() {	
-		Query query = this.em.createQuery("select g from Gift g");
+		Query query = this.em.createQuery("select g from Gift g", this.entityClass);
 		
-		try {
-			query.getSingleResult();
-			return true;
-		} catch (NoResultException ex) {
-			return false;
-		} catch (NonUniqueResultException ex) {
-			return true;
-		}
+		return this.getBooleanfromResult(query);
 	}
 	
 	@Transactional(readOnly = true)
 	public boolean giftsExist(String... unlessNames) {	
-		Query query = this.em.createQuery("select g from Gift g where g.owner not in :names", Gift.class);
+		Query query = this.em.createQuery("select g from Gift g where g.owner not in :names", this.entityClass);
 		query.setParameter("names", Arrays.asList(unlessNames));
-		
-		try {
-			query.getSingleResult();
-			return true;
-		} catch (NoResultException ex) {
-			return false;
-		} catch (NonUniqueResultException ex) {
-			return true;
-		}
+
+		return this.getBooleanfromResult(query);
 	}
 }

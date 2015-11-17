@@ -13,24 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.debatz.gifts.model.User;
 
 @Repository
-public class UserDao
+public class UserDao extends AbstractDao<User, Integer>
 {
+	public UserDao() {
+		super(User.class);
+	}
 
-	@PersistenceContext
-	private EntityManager em;
-     
-	@Transactional
-    public String save(User person) {
-        this.em.persist(person);
-        return person.getUsername();
-    }
-	
-	@Transactional
-    public String update(User person) {
-        this.em.merge(person);
-        return person.getUsername();
-    }
-	
 	@Transactional
 	public List<User> getUsers() {
 		Query query = this.em.createQuery("select u from User u");
