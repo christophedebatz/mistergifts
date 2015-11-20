@@ -23,7 +23,8 @@
 
         <form-login login-page="/login" default-target-url="/mylist" 
                     authentication-success-handler-ref="authenticationSuccessHandler" 
-                    authentication-failure-url="/login?error" username-parameter="username"
+                    authentication-failure-url="/login?error" 
+                    username-parameter="username"
                     password-parameter="password" />
         
         <logout logout-url="/logout" logout-success-url="/login?logout" />

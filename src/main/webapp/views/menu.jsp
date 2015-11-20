@@ -14,14 +14,13 @@
   <div class="container">
   
     <a class="navbar-brand" href="<c:url value="/" />" data-toggle="tooltip" data-placement="bottom" title="<spring:message code="site.menu.home"/>">
-    	<img src="<c:url value="/resources/pictures/rsz_gift.png" />" />
-    	&nbsp; Mister Gifts
+    	<img src="<c:url value="/resources/pictures/rsz_gift.png" />" />&nbsp; Mister Gifts
     </a>
     
     <ul class="nav navbar-nav">
         <c:if test="${not empty pageContext.request.userPrincipal.name}">
-            <li<c:if test="${param.currentTab eq 'group'}"> class="active"</c:if>><a href="<c:url value="/grouplist" />"<c:if test="${param.currentTab ne 'family'}"> data-toggle="tooltip" data-placement="bottom" title="<spring:message code="site.menu.grouplist.tooltip"/>"></c:if>><spring:message code="site.menu.grouplist"/></a></li>
-            <li<c:if test="${param.currentTab eq 'myList'}"> class="active"</c:if>><a href="<c:url value="/mylist" />"<c:if test="${param.currentTab ne 'myList'}"> data-toggle="tooltip" data-placement="bottom" title="<spring:message code="site.menu.mylist.tooltip"/>"></c:if>><spring:message code="site.menu.mylist"/></a></li>
+            <li<c:if test="${param.currentTab eq 'group'}"> class="active"</c:if>><a href="<c:url value="/grouplist" />"<c:if test="${param.currentTab ne 'family'}"> data-toggle="tooltip" data-placement="bottom" title="<spring:message code="site.menu.grouplist.tooltip"/>"</c:if>><spring:message code="site.menu.grouplist"/></a></li>
+            <li<c:if test="${param.currentTab eq 'myList'}"> class="active"</c:if>><a href="<c:url value="/mylist" />"<c:if test="${param.currentTab ne 'myList'}"> data-toggle="tooltip" data-placement="bottom" title="<spring:message code="site.menu.mylist.tooltip"/>"</c:if>><spring:message code="site.menu.mylist"/></a></li>
          </c:if>
         <li<c:if test="${param.currentTab eq 'about'}"> class="active"</c:if>><a href="<c:url value="/about" />"<c:if test="${param.currentTab ne 'about'}"> data-toggle="tooltip" data-placement="bottom" title="<spring:message code="site.menu.about.tooltip"/>"</c:if>><spring:message code="site.menu.about"/></a></li>
     </ul>
