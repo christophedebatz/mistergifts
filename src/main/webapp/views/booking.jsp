@@ -9,29 +9,33 @@
 <div class="container">
   <div class="jumbotron">
   
-    <h2>Book a gift</h2>
+    <h2><spring:message code="site.page.booking.title"/></h2>
     
     <c:choose>
     	<c:when test="${empty gift}">
 	    	
 	    	<div class="alert alert-warning" role="alert">
-				<p>This gift does not exist at the moment...</p>
+				<p><spring:message code="site.page.booking.error.notfound"/></p>
 			</div>
 			
 	    </c:when>
 	    <c:otherwise>
+
+			<c:set var="giftUrl">
+				<c:url value="/gift/${gift.slug}"/>
+			</c:set>
 	    
 	    	<c:choose>
     			<c:when test="${empty response}">
 	    
 					<fieldset>
-					
 						<p class="alert alert-warning font-size: 14px;">
-							Attention, En réservant un cadeau pour un utilisateur, vous vous engagez à le lui offrir. En effet, dès lors que le cadeau à offrir vous est réservé, aucun autre utilisateur ne peut le réserver à son tour. Vous pouvez toujours dé-réserver un cadeau par la suite mais ce n'est pas conseillé.
+							<spring:message code="site.page.booking.description"/>
 						</p>
-						
-						<p>Are you sure that you want to book the gift "<a href="<c:url value="/gift/${gift.slug}" />" title="See details"><span style="font-weight: bold;">${gift.name}</span></a>" for <span style="font-weight: bold;">${gift.owner.username}</span>?</p>
-						
+
+						<p>
+							<spring:message code="site.page.booking.confirmmsg" arguments="${giftUrl},${gift.name},${gift.owner.username}"/>
+						</p>
 					</fieldset>
 					
 					<form action="<c:url value="/grouplist/booking" />" method="post">
@@ -41,8 +45,10 @@
 						<input type="hidden" name="action" value="completeBooking" />
 					
 						<p style="text-align: right;">
-							<button onclick="window.location='<c:url value="/grouplist" />'; return false;" class="btn btn-default">No</button>  
-							<input type="submit" value="Yes" class="btn btn-primary" />
+							<button onclick="window.location='<c:url value="/grouplist" />'; return false;" class="btn btn-default">
+								<spring:message code="site.page.booking.form.no"/>
+							</button>
+							<input type="submit" value="<spring:message code="site.page.booking.form.yes"/>" class="btn btn-primary" />
 						</p>
 					</form>
 				</c:when>
@@ -50,11 +56,15 @@
 				<c:otherwise>
 				
 					<div class="alert alert-success" role="alert">
-						<p>Success! You'd just book <a href="<c:url value="/gift/${gift.slug}"/>">a gift</a> for ${gift.owner.username}. Thanks.</p>
+						<p>
+							<spring:message code="site.page.booking.successmsg" arguments="${giftUrl},${gift.owner.username}"/>
+						</p>
 					</div>
 				
 					<p style="text-align: right;">
-						<button onclick="window.location='<c:url value="/grouplist" />';" class="btn btn-default">Back to list</button> 
+						<button onclick="window.location='<c:url value="/grouplist" />';" class="btn btn-default">
+							<spring:message code="site.page.booking.back"/>
+						</button>
 					</p>
 				</c:otherwise>
 			</c:choose>

@@ -1,5 +1,4 @@
-<%@page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8" isELIgnored="false"%>
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -11,14 +10,14 @@
 
 <div class="container">
 	<div class="jumbotron">
-		<h2>My gift list</h2>
-		<h4>List</h4>
+		<h2><spring:message code="site.page.mylist.title"/></h2>
+		<h4><spring:message code="site.page.mylist.subtitle"/></h4>
 
 		<c:choose>
 			<c:when test="${fn:length(user.ownedGifts) <= 0 }">
 
 				<div class="alert alert-info" role="alert">
-					<p>Your current gift list is still empty yet...</p>
+					<p><spring:message code="site.page.mylist.warn.empty"/></p>
 				</div>
 
 			</c:when>
@@ -29,9 +28,9 @@
 					<table class="table table-hover">
 						<thead>
 							<tr>
-								<th>Name</th>
-								<th>Brand</th>
-								<th>Details</th>
+								<th><spring:message code="site.page.mylist.tableheader.name"/></th>
+								<th><spring:message code="site.page.mylist.tableheader.brand"/></th>
+								<th><spring:message code="site.page.mylist.tableheader.details"/></th>
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -71,12 +70,12 @@
 								</td>
 								<td>
 									<c:choose>
-										<c:when test="${gift.booker ne null}">Not removable</c:when>
+										<c:when test="${gift.booker ne null}"><spring:message code="site.page.mylist.unremovable"/></c:when>
 										<c:otherwise>
 											<form action="<c:url value="/gift" />" method="post">
 												<input type="hidden" name="giftId" value="${gift.id}" />
 												<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-												<input type="submit" class="btn btn-xs btn-danger" value="Remove" />
+												<input type="submit" class="btn btn-xs btn-danger" value="<spring:message code="site.page.mylist.remove"/>" />
 											</form>
 										</c:otherwise>
 									</c:choose>
@@ -95,43 +94,41 @@
 
 		<p>&nbsp;</p>
 
-		<img src="<c:url value="/resources/pictures/gifts.png" />"
-			style="float: right;" />
+		<img src="<c:url value="/resources/pictures/gifts.png" />"style="float: right;" />
 
-		<h4>New gift</h4>
-		<form action="<c:url value="/mylist" />" method="post"
-			style="width: 85%;">
+		<h4><spring:message code="site.page.mylist.form.title"/></h4>
+		<form action="<c:url value="/mylist" />" method="post" style="width: 85%;">
 			<fieldset>
-				<legend>Required</legend>
+				<legend><spring:message code="site.page.mylist.form.required"/></legend>
 
 				<div class="form-group">
 					<input type="text" name="name" class="form-control"
-						placeholder="Name..." />
+						placeholder="<spring:message code="site.page.mylist.form.name"/>" />
 				</div>
 
 				<div class="form-group">
 					<input type="text" name="brand" class="form-control"
-						placeholder="Brand or editor..." />
+						placeholder="<spring:message code="site.page.mylist.form.brand"/>" />
 				</div>
 			</fieldset>
 
 			<fieldset>
-				<legend>Optional</legend>
+				<legend><spring:message code="site.page.mylist.form.optional"/></legend>
 				<div class="form-group">
 					<textarea name="details" class="form-control"
-						placeholder="Details..."></textarea>
+						placeholder="<spring:message code="site.page.mylist.form.details"/>"></textarea>
 				</div>
 
 				<div class="form-group">
 					<input type="text" name="picture" class="form-control"
-						placeholder="Picture url..." />
+						placeholder="<spring:message code="site.page.mylist.form.picture"/>" />
 				</div>
 
 				<div style="float: right; margin-bottom: 10px;" class="btn-group">
 					<button type="button" onclick="addLink();"
-						class="btn btn-xs btn-success">Add</button>
+						class="btn btn-xs btn-success"><spring:message code="site.page.mylist.form.add"/></button>
 					<button type="button" onclick="removeLink();"
-						class="btn btn-xs btn-danger">Remove</button>
+						class="btn btn-xs btn-danger"><spring:message code="site.page.mylist.form.remove"/></button>
 				</div>
 
 				<div class="form-group">
@@ -140,7 +137,7 @@
 							<input type="text" name="shoplink" id="shoplink1"
 								class="form-control"
 								style="margin-bottom: 2px; margin-top: 2px;"
-								placeholder="Shop link #1..." />
+								placeholder="<spring:message code="site.page.mylist.form.shoplink"/>1..." />
 						</div>
 					</div>
 				</div>
@@ -149,7 +146,7 @@
 					value="${_csrf.token}" />
 			</fieldset>
 
-			<input type="submit" value="Validate" class="btn btn-large btn-primary" />
+			<input type="submit" value="<spring:message code="site.page.mylist.form.validate"/>" class="btn btn-large btn-primary" />
 
 		</form>
 
@@ -171,7 +168,7 @@
 		newTextBoxDiv
 				.after()
 				.html(
-						'<input style="margin-bottom: 2px; margin-top: 2px;" type="text" name="shoplink" id="shoplink' + counter + '" class="form-control" placeholder="Shop link #' + counter + '..." />');
+						'<input style="margin-bottom: 2px; margin-top: 2px;" type="text" name="shoplink" id="shoplink' + counter + '" class="form-control" placeholder="<spring:message code="site.page.mylist.form.shoplink"/>' + counter + '..." />');
 		newTextBoxDiv.appendTo("#TextBoxesGroup");
 
 		counter++;

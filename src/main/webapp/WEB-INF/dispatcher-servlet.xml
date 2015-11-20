@@ -10,23 +10,37 @@
     http://www.springframework.org/schema/mvc/spring-mvc.xsd
     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
 
-    <mvc:annotation-driven />
-
     <tx:annotation-driven transaction-manager="transactionManager" />
 
     <context:component-scan base-package="com.debatz.gifts" />
 
     <context:load-time-weaver />
 
-    <bean id="messageSource"
-              class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-        <property name="basename" value="classpath:messages" />
-        <property name="defaultEncoding" value="UTF-8" />
-    </bean>
+    <mvc:annotation-driven />
+
+    <mvc:resources mapping="/resources/**" location="/resources/" />
+
+    <mvc:interceptors>
+        <bean id="localeChangeInterceptor"
+              class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+            <property name="paramName" value="lang" />
+        </bean>
+    </mvc:interceptors>
 
     <bean id="authenticationListener" class="com.debatz.gifts.controller.AuthenticationListener" />
 
     <bean id="authenticationSuccessHandler" class="com.debatz.gifts.controller.AuthorizationHandler" />
+
+    <bean id="localeResolver"
+          class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+        <property name="defaultLocale" value="en" />
+    </bean>
+
+    <bean id="messageSource"
+          class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basename" value="messages" />
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
 
     <bean
         class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -37,7 +51,4 @@
             <value>.jsp</value>
         </property>
     </bean>
-
-    <mvc:resources mapping="/resources/**" location="/resources/" />
-
 </beans>

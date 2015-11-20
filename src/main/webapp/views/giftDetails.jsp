@@ -8,7 +8,7 @@
 <div class="container">
   <div class="jumbotron">
   
-    <h2>Gift informations</h2>
+    <h2><spring:message code="site.page.details.title"/></h2>
 
 	<fieldset>
 	
@@ -20,15 +20,15 @@
 					<img src="${selectedGift.picture}" title="${selectedGift.brand} ${selectedGift.name}" style="float: right;" />
 				</c:if>
 
-				<h4><span class="label label-default">Brand</span></h4>
+				<h4><span class="label label-default"><spring:message code="site.page.details.brand"/></span></h4>
 				<p>${selectedGift.brand}</p>
 
-				<h4><span class="label label-default">Details</span></h4>
+				<h4><span class="label label-default"><spring:message code="site.page.details.details"/></span></h4>
 				<p>${selectedGift.details}</p>
 				
 				<div style="margin-top: 40px;">
 					<c:if test="${not empty selectedGift.shopLinks}">
-						<h4><span class="label label-default">Shop links</span></h4>
+						<h4><span class="label label-default"><spring:message code="site.page.details.shoplinks"/></span></h4>
 						<ul style="list-style-type: none;">
 							<c:forEach items="${selectedGift.shopLinks}" var="link">
 								<li><span class="glyphicon glyphicon-link"> <a class="link-list" href="${link}" target="_blank">${fn:substring(link, 0, 80)}...</a></span></li>
@@ -40,7 +40,7 @@
 				
 			<c:otherwise>
 				<div class="alert alert-info" role="warning">
-					<p>This gift does not exist...</p>
+					<p><spring:message code="site.page.details.error.notfound"/></p>
 				</div>
 			</c:otherwise>
 		</c:choose>
@@ -48,7 +48,7 @@
 	</fieldset>
 	
 	<p style="text-align: right;">
-		<button onclick="javascript: history.back();" class="btn btn-default">Back previous</button>
+		<button onclick="javascript: history.back();" class="btn btn-default"><spring:message code="site.page.details.back"/></button>
 	</p>
 		
   </div>

@@ -10,24 +10,24 @@
 
 <div class="container">
   <div class="jumbotron">
-    <h2>Their gifts lists</h2>
+    <h2><spring:message code="site.page.grouplist.title"/></h2>
 
 	<fieldset>
-		<legend>List per user</legend>
+		<legend><spring:message code="site.page.grouplist.subtitle"/></legend>
 
 		<c:choose>
 			<c:when test="${ empty users }">
 			
 				<div class="alert alert-info" role="alert">
-					<p>There is no users currently.</p>
+					<p><spring:message code="site.page.grouplist.error.nouser"/></p>
 				</div>
-				
+
 			</c:when>
 			
 			<c:when test="${ not hasGift }">
 			
 				<div class="alert alert-info" role="alert">
-					<p>There is no registered gifts yet.</p>
+					<p><spring:message code="site.page.grouplist.error.nogiftlist"/></p>
 				</div>
 				
 			</c:when>
@@ -38,10 +38,10 @@
 				  <table class="table table-hover">
 					  <thead>
 						  <tr>
-						  	<th>User name</th>
-						  	<th>Gift name</th>
-						  	<th>Gift brand</th>
-						  	<th>Booker</th>
+						  	<th><spring:message code="site.page.grouplist.username"/></th>
+						  	<th><spring:message code="site.page.grouplist.giftname"/></th>
+						  	<th><spring:message code="site.page.grouplist.giftbrand"/></th>
+						  	<th><spring:message code="site.page.grouplist.booker"/></th>
 						  </tr>
 				  		</thead>
 				  		<tbody>

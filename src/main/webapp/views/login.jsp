@@ -14,7 +14,7 @@
 	<div class="jumbotron">
 	
 		<fieldset style="margin-top: 30px; max-width: 425px;">
-			<legend>Login</legend>
+			<legend><spring:message code="site.page.login.subtitle"/></legend>
 					
 			<c:choose>
 				<c:when test="${empty pageContext.request.userPrincipal.name}">
@@ -30,15 +30,15 @@
 					<form name="loginForm" action="<c:url value="/j_spring_security_check" />" method="post">
 					
 					  	<div class="form-group">
-					    	<input type="username" name="username" class="form-control" placeholder="Username...">
+					    	<input type="username" name="username" class="form-control" placeholder="<spring:message code="site.page.login.form.username"/>">
 					  	</div>
 					  	
 					  	<div class="form-group">
-					    	<input type="password" name="password" class="form-control" placeholder="Password...">
+					    	<input type="password" name="password" class="form-control" placeholder="<spring:message code="site.page.login.form.password"/>">
 					  	</div>
 					  
 					  	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-					  	<button type="submit" class="btn btn-large btn-primary">Log in</button>
+					  	<button type="submit" class="btn btn-large btn-primary"><spring:message code="site.page.login.form.login"/></button>
 						
 					</form>
 					

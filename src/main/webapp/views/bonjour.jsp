@@ -7,14 +7,14 @@
 <div class="container">
   <div class="jumbotron text-center">
     <h1>Mister Gifts</h1>
-    <p class="lead" style="margin-top: 25px;">Welcome to Mister Gifts. The web portal that allow you to expose you presents list and also participate to another gifts list. To begin, click on the bellow button or browe the top menu.</p>
+    <p class="lead" style="margin-top: 25px;"><spring:message code="site.page.home.description"/></p>
     
     <p style="text-align: center;">
     	<img src="<c:url value="/resources/pictures/biggift.png" />" />
     </p>
     
     <p style="margin-top: 50px; text-align: center;">
-    	<a class="btn btn-lg btn-primary" href="<c:url value="/mylist" />">Begin my own list</a>
+    	<a class="btn btn-lg btn-primary" href="<c:url value="/mylist" />"><spring:message code="site.page.home.begin"/></a>
     </p>
     
   </div>
