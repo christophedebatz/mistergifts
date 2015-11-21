@@ -20,12 +20,68 @@
 		<!--[if lt IE 9]>
 			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
+
+        <style>
+            #page {
+                display: none;
+            }
+
+            #loading {
+                display: block;
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index: 100;
+                width: 100vw;
+                height: 100vh;
+                background-color: #245682;
+                background-image: url('<c:url value="/resources/pictures/spin.gif" />');
+                background-repeat: no-repeat;
+                background-position: center;
+            }
+        </style>
+
+        <script type="text/javascript">
+            function onReady(callback) {
+                var intervalID = window.setInterval(checkReady, 500);
+                function checkReady() {
+                    if (document.getElementsByTagName('body')[0] !== undefined) {
+                        window.clearInterval(intervalID);
+                        callback.call(this);
+                    }
+                }
+            }
+
+            function show(id, value) {
+                document.getElementById(id).style.display = value ? 'block' : 'none';
+            }
+
+            onReady(function () {
+                var lks = document.getElementsByTagName('a');
+
+                for (var i = 0; i < lks.length; i++) {
+                    var href = lks[i].href;
+                    if (href.charAt(href.length - 1) != '#' && lks[i].target != '_blank') {
+                        lks[i].addEventListener('click', function (e) {
+                            show('page', false);
+                            show('loading', true);
+                        });
+                    }
+                }
+
+                show('page', true);
+                show('loading', false);
+            });
+
+        </script>
 		
 	</head>
 	<body>
-	
-	<img class="rubban" src="<c:url value="/resources/pictures/rubban.png" />" style="z-index: 1000; position: absolute; top: 0; left: 0;" />
 
-		<div id="wrap">
+    <div id="loading"></div>
 
-			<jsp:include page="menu.jsp"></jsp:include>
+    <img class="rubban" src="<c:url value="/resources/pictures/rubban.png" />" style="z-index: 1000; position: absolute; top: 0; left: 0;" />
+
+        <div id="wrap">
+
+            <jsp:include page="menu.jsp"></jsp:include>
