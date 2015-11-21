@@ -2,7 +2,6 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
             </div>
-            <div id="push"></div>
         </div>
 
         <div id="footer">

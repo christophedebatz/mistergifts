@@ -140,12 +140,10 @@
         <fieldset>
             <legend><spring:message code="site.page.grouplist.userlist"/> (${fn:length(users)})</legend>
 
-            <div style="font-size: 13px;">
-                <c:forEach items="${users}" var="user">
-                    <span class="label label-default"><span class="glyphicon glyphicon-user"></span> ${user.username}</span>&nbsp;
-                </c:forEach>
-                 <span class="label label-primary">${pageContext.request.userPrincipal.name}</span>
-            </div>
+            <c:forEach items="${users}" var="user">
+                <span style="font-size: 13px;" class="label label-default"><span class="glyphicon glyphicon-user"></span> ${user.username}</span>&nbsp;
+            </c:forEach>
+             <span style="font-size: 13px;" class="label label-primary"><span class="glyphicon glyphicon-user"></span> ${pageContext.request.userPrincipal.name}</span>
 
         </fieldset>
     </div>

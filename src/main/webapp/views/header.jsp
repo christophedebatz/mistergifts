@@ -42,8 +42,9 @@
         </style>
 
         <script type="text/javascript">
-            function onReady(callback) {
-                var intervalID = window.setInterval(checkReady, 500);
+            function onReady(callback)
+            {
+                var intervalID = window.setInterval(checkReady, 333);
                 function checkReady() {
                     if (document.getElementsByTagName('body')[0] !== undefined) {
                         window.clearInterval(intervalID);
