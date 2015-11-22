@@ -5,35 +5,22 @@ import java.net.URL;
 
 public class RemoteUploadService
 {
-    private String localSavePlace;
+    public static void save(String remoteFileUrl, String localFileUrl) throws IOException {
+        InputStream is;
+        OutputStream os;
 
-    public RemoteUploadService(String localSavePlace) {
-        this.localSavePlace = localSavePlace;
-    }
+        URL url = new URL(remoteFileUrl);
+        is = url.openStream();
+        os = new FileOutputStream(localFileUrl);
 
-    public void saveRemoteFile(String remoteFileUrl) throws IOException {
-        URL url = null;
+        byte[] b = new byte[2048];
+        int length;
 
-        try {
-            url = new URL(remoteFileUrl);
-
-            InputStream is = url.openStream();
-            OutputStream os = new FileOutputStream(this.localSavePlace);
-
-            byte[] b = new byte[2048];
-            int length;
-
-            while ((length = is.read(b)) != -1) {
-                os.write(b, 0, length);
-            }
-
-            is.close();
-            os.close();
-
-        } catch (FileNotFoundException ex) {
-            throw ex;
-        } catch (IOException ex) {
-            throw ex;
+        while ((length = is.read(b)) != -1) {
+            os.write(b, 0, length);
         }
+
+        is.close();
+        os.close();
     }
 }

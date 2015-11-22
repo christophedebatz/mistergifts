@@ -6,7 +6,12 @@ import com.debatz.gifts.model.User;
 import com.debatz.gifts.model.dao.GiftDao;
 import com.debatz.gifts.model.dao.UserDao;
 import com.debatz.gifts.service.FileService;
+import com.debatz.gifts.service.RemoteUploadService;
 import com.debatz.gifts.service.SlugService;
+import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.name.Rename;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,11 +19,21 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Controller
 public class ListController extends ControllerBase
 {
+    private static final Logger logger = LogManager.getLogger(RemoteUploadService.class);
+
+    //private static final String UPLOADS_DIRECTORY = "/home/pi/uploads/mistergifts/";
+
+    private static final String UPLOADS_DIRECTORY = "/Users/christophedebatz/Documents/workspace/MisterGifts/uploads/";
+
     @Autowired
     private SessionBean sessionBean;
 
@@ -62,7 +77,8 @@ public class ListController extends ControllerBase
                 this.giftDao.update(giftToBook);
 
                 model.addObject("response", "booked");
-            } else if (giftToBook.getBooker() != null && giftToBook.getBooker().getUsername().equals(currentUser.getUsername())) {
+            }
+            else if (giftToBook.getBooker() != null && giftToBook.getBooker().getUsername().equals(currentUser.getUsername())) {
                 List<Gift> currentBooking = currentUser.getBookedGifts();
                 currentBooking.remove(giftToBook);
                 giftToBook.setBooker(null);
@@ -83,10 +99,17 @@ public class ListController extends ControllerBase
     }
 
     @RequestMapping(value = "/mylist", method = RequestMethod.GET)
-    public ModelAndView myListPage() {
+    public ModelAndView myListPage(HttpServletRequest request) {
         ModelAndView model = new ModelAndView();
-        User currentUser = this.userDao.findByUserName(this.sessionBean.getUsername());
+
+        final User currentUser = this.userDao.findByUserName(this.sessionBean.getUsername());
+        List<User> users = this.userDao.getUsers().stream().filter(
+                u -> !u.getUsername().equals(currentUser.getUsername())
+        ).collect(Collectors.toList());
+
         model.addObject("user", currentUser);
+        model.addObject("users", users);
+        model.addObject("error", request.getParameter("error"));
         model.setViewName("myList");
 
         return model;
@@ -98,30 +121,66 @@ public class ListController extends ControllerBase
             @RequestParam(value = "brand", required = true) String brand,
             @RequestParam(value = "details", required = false) String details,
             @RequestParam(value = "picture", required = false) String picture,
-            @RequestParam(value = "shoplink", required = false) List<String> shoplinks) {
+            @RequestParam(value = "shoplink", required = false) List<String> shoplinks,
+            @RequestParam(value = "onlyViewer", required = false) String onlyViewer) {
 
-        if (!FileService.checkIfExists(picture)) {
-            picture = null;
+        boolean hasError = true;
+        String pictureLocalPath = null;
+
+        if (picture == null || picture.equals("")) {
+            hasError = false;
         }
 
-        User currentUser = this.userDao.findByUserName(this.sessionBean.getUsername());
+        else if (FileService.checkIfExists(picture))
+        {
+            String[] pictureExtArray = picture.split("\\.");
+            String pictureExt = pictureExtArray[pictureExtArray.length - 1];
 
-        currentUser.addOwnedGift(
-                new Gift(
-                        name.substring(0, 1).toUpperCase() + name.substring(1),
-                        SlugService.getSlug(this.giftDao.getNextSequence() + " " + brand + " " + name),
-                        brand.toUpperCase(),
-                        details.length() == 0 ? null : details.substring(0, 1).toUpperCase() + details.substring(1),
-                        picture,
-                        shoplinks,
-                        currentUser
-                )
-        );
+            pictureLocalPath = UUID.randomUUID().toString() + "." + pictureExt;
+            String uploadLocalPath = UPLOADS_DIRECTORY + pictureLocalPath;
 
-        this.userDao.update(currentUser);
+            try {
+                RemoteUploadService
+                        .save(picture, uploadLocalPath);
+
+                Thumbnails.of(uploadLocalPath)
+                        .size(450, 600)
+                        .toFiles(new File(UPLOADS_DIRECTORY), Rename.NO_CHANGE);
+
+                hasError = false;
+
+            } catch (Exception ex) {
+                logger.debug(ex.getMessage());
+            }
+        }
+
+        if (!hasError)
+        {
+            try {
+                User currentUser = this.userDao.findByUserName(this.sessionBean.getUsername());
+                User onlyViewerUser = this.userDao.findByUserName(onlyViewer);
+
+                Gift owned = new Gift();
+                owned.setName(name.substring(0, 1).toUpperCase() + name.substring(1));
+                owned.setSlug(SlugService.getSlug(this.giftDao.getNextSequence() + " " + brand + " " + name));
+                owned.setBrand(brand.toUpperCase());
+                owned.setDetails(details.length() == 0 ? null : details.substring(0, 1).toUpperCase() + details.substring(1));
+                owned.setPicture(pictureLocalPath);
+                owned.setShopLinks(shoplinks);
+                owned.setOwner(currentUser);
+                owned.setOnlyViewer(onlyViewerUser);
+
+                currentUser.addOwnedGift(owned);
+                this.userDao.update(currentUser);
+                hasError = false;
+
+            } catch (Exception ex) {
+                logger.debug(ex.getMessage(), ex);
+            }
+        }
 
         ModelAndView model = new ModelAndView();
-        model.setViewName("redirect:/mylist");
+        model.setViewName("redirect:/mylist" + (hasError ? "?error" : ""));
 
         return model;
     }

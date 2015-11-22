@@ -55,65 +55,75 @@
 
                                 <c:forEach items="${user.ownedGifts}" var="gift">
 
-                                    <c:choose>
-                                        <c:when test="${gift.booker ne null}">
-                                            <tr class="default">
-                                        </c:when>
-                                        <c:otherwise>
-                                            <tr class="${currentRawClass}">
-                                        </c:otherwise>
-                                    </c:choose>
-
-                                    <td>
+                                    <c:set var="isSecured" value="${gift.onlyViewer != null && gift.onlyViewer.username eq pageContext.request.userPrincipal.name}"/>
+                                    <c:if test="${(gift.onlyViewer == null) || isSecured}">
 
                                         <c:choose>
-                                            <c:when test="${currentGift eq 0}">
-                                                <b>${user.username}</b>
+                                            <c:when test="${gift.booker ne null}">
+                                                <tr class="default">
                                             </c:when>
                                             <c:otherwise>
+                                                <tr class="${currentRawClass}">
+                                            </c:otherwise>
+                                        </c:choose>
+
+                                        <td>
+
+                                            <c:choose>
+                                                <c:when test="${currentGift eq 0}">
+                                                    <b>${user.username}</b>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    &nbsp;
+                                                </c:otherwise>
+                                            </c:choose>
+
+                                        </td>
+
+                                        <td>
+                                            <c:if test="${isSecured}">
+                                                <img src="<c:url value="/resources/pictures/cadna.png"/>" data-toggle="tooltip" data-placement="bottom" title="<spring:message code="site.page.grouplist.onlyviewercadna"/>">
                                                 &nbsp;
-                                            </c:otherwise>
-                                        </c:choose>
+                                            </c:if>
+                                            <a href="<c:url value="/gift/${gift.slug}" />">${gift.name}</a>
+                                        </td>
+                                        <td>${gift.brand}</td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${empty gift.booker}">
+                                                    <form action="<c:url value="/grouplist/booking" />" method="post">
+                                                        <input type="hidden" name="${_csrf.parameterName}"
+                                                               value="${_csrf.token}"/>
+                                                        <input type="hidden" name="giftId" value="${gift.id}"/>
+                                                        <input type="submit" class="btn btn-xs ${currentButtonClass}"
+                                                               value="<spring:message code="site.page.grouplist.book"/>"/>
+                                                    </form>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:choose>
+                                                        <c:when test="${gift.booker.username eq pageContext.request.userPrincipal.name}">
+                                                            <form action="<c:url value="/grouplist/booking" />"
+                                                                  method="post">
+                                                                <input type="hidden" name="${_csrf.parameterName}"
+                                                                       value="${_csrf.token}"/>
+                                                                <input type="hidden" name="giftId" value="${gift.id}"/>
+                                                                <input type="submit" class="btn btn-xs btn-default"
+                                                                       value="<spring:message code="site.page.grouplist.unbook"/>"/>
+                                                            </form>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            ${gift.booker.username}
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
 
-                                    </td>
+                                        </tr>
 
-                                    <td><a href="<c:url value="/gift/${gift.slug}" />">${gift.name}</a></td>
-                                    <td>${gift.brand}</td>
-                                    <td>
-                                        <c:choose>
-                                            <c:when test="${empty gift.booker}">
-                                                <form action="<c:url value="/grouplist/booking" />" method="post">
-                                                    <input type="hidden" name="${_csrf.parameterName}"
-                                                           value="${_csrf.token}"/>
-                                                    <input type="hidden" name="giftId" value="${gift.id}"/>
-                                                    <input type="submit" class="btn btn-xs ${currentButtonClass}"
-                                                           value="<spring:message code="site.page.grouplist.book"/>"/>
-                                                </form>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <c:choose>
-                                                    <c:when test="${gift.booker.username eq pageContext.request.userPrincipal.name}">
-                                                        <form action="<c:url value="/grouplist/booking" />"
-                                                              method="post">
-                                                            <input type="hidden" name="${_csrf.parameterName}"
-                                                                   value="${_csrf.token}"/>
-                                                            <input type="hidden" name="giftId" value="${gift.id}"/>
-                                                            <input type="submit" class="btn btn-xs btn-default"
-                                                                   value="<spring:message code="site.page.grouplist.unbook"/>"/>
-                                                        </form>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        ${gift.booker.username}
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </td>
+                                        <c:set var="currentGift" value="${currentGift + 1}"/>
 
-                                    </tr>
-
-                                    <c:set var="currentGift" value="${currentGift + 1}"/>
-
+                                    </c:if>
                                 </c:forEach>
 
                                 <c:choose>

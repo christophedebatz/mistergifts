@@ -14,9 +14,11 @@
 
         <intercept-url pattern="/admin**" access="hasRole('ROLE_ADMIN')" />
         <intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" />
-        <intercept-url pattern="/mylist**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')" />
-        <intercept-url pattern="/family**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')" />
+        <intercept-url pattern="/grouplist**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')" />
+        <intercept-url pattern="/grouplist/**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')" />
         <intercept-url pattern="/gift**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')" />
+        <intercept-url pattern="/gift/**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')" />
+        <intercept-url pattern="/mylist**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')" />
         <intercept-url pattern="/mylist/**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')" />
  
         <access-denied-handler error-page="/login?denied" />

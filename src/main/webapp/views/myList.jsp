@@ -7,13 +7,20 @@
 	<jsp:param name="currentTab" value="myList" />
 </jsp:include>
 
-
 <div class="container">
 	<div class="jumbotron">
+
 		<h2><spring:message code="site.page.mylist.title"/></h2>
 		<h4><spring:message code="site.page.mylist.subtitle"/></h4>
 
 		<c:choose>
+			<c:when test="${error != null}">
+
+				<div class="alert alert-warning" role="alert">
+					<p>Error when uploading picture.</p>
+				</div>
+
+			</c:when>
 			<c:when test="${fn:length(user.ownedGifts) <= 0 }">
 
 				<div class="alert alert-info" role="alert">
@@ -38,7 +45,11 @@
 						<c:forEach items="${user.ownedGifts}" var="gift">
 
 							<tr>
-								<td><a href="<c:url value="/gift/${gift.slug}" />">
+								<td>
+									<c:if test="${gift.onlyViewer != null}">
+										<img src="<c:url value="/resources/pictures/cadna.png" />" data-toggle="tooltip" data-placement="bottom" title="<spring:message code="site.page.mylist.onlyviewercadna" arguments="${gift.onlyViewer.username}"/>">&nbsp;
+									</c:if>
+									<a href="<c:url value="/gift/${gift.slug}" />">
 									<c:choose>
 										<c:when test="${fn:length(gift.name) > 20 }">
 											${fn:substring(gift.name, 0, 20)}...
@@ -109,6 +120,17 @@
 				<div class="form-group">
 					<input type="text" name="brand" class="form-control"
 						placeholder="<spring:message code="site.page.mylist.form.brand"/>" />
+				</div>
+			</fieldset>
+
+			<fieldset>
+				<legend><spring:message code="site.page.mylist.form.onlyviewertitle"/></legend>
+				<div class="form-group">
+					<select name="onlyViewer" class="selectpicker show-tick form-control" data-live-search="true" title="<spring:message code="site.page.mylist.form.onlyvieweroption"/>">
+						<c:forEach items="${users}" var="user">
+							<option data-icon="glyphicon-user" value="${user.username}">${user.username}</option>
+						</c:forEach>
+					</select>
 				</div>
 			</fieldset>
 

@@ -28,9 +28,9 @@ public class GiftController extends ControllerBase
     private UserDao userDao;
 
     @RequestMapping(value = "/gift/{slug}", method = RequestMethod.GET)
-    public ModelAndView myListGiftPage(@PathVariable(value = "slug") final String slug) {
+    public ModelAndView myListGiftPage(@PathVariable(value = "slug") final String slug)
+    {
         ModelAndView model = new ModelAndView();
-
         model.addObject("selectedGift", this.giftDao.findGift(slug));
         model.setViewName("giftDetails");
 
@@ -38,7 +38,8 @@ public class GiftController extends ControllerBase
     }
 
     @RequestMapping(value = "/gift", method = RequestMethod.POST)
-    public ModelAndView myListGiftPage(@RequestParam(value = "giftId", required = true) int giftId) throws Exception {
+    public ModelAndView myListGiftPage(@RequestParam(value = "giftId", required = true) int giftId) throws Exception
+    {
         Gift giftToRemove = this.giftDao.find(giftId);
         User currentUser = this.userDao.findByUserName(this.sessionBean.getUsername());
 

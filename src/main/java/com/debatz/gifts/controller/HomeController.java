@@ -5,15 +5,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class HomeController extends ControllerBase
 {
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
-    public ModelAndView defaultPage() {
-
+    public ModelAndView defaultPage()
+    {
         ModelAndView model = new ModelAndView();
         model.setViewName("bonjour");
 
@@ -21,8 +20,8 @@ public class HomeController extends ControllerBase
     }
 
     @RequestMapping(value = "/about", method = RequestMethod.GET)
-    public ModelAndView aboutPage() {
-
+    public ModelAndView aboutPage()
+    {
         ModelAndView model = new ModelAndView();
         model.setViewName("about");
         return model;
@@ -30,7 +29,6 @@ public class HomeController extends ControllerBase
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView login(
-            HttpServletRequest request,
             @RequestParam(value = "error", required = false) String error,
             @RequestParam(value = "denied", required = false) String denied,
             @RequestParam(value = "logout", required = false) String logout) {

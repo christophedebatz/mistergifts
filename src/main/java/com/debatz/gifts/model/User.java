@@ -17,9 +17,7 @@ import javax.persistence.Table;
 @Table(name="USERS")
 public class User implements Serializable
 {
-	
 	private static final long serialVersionUID = 7782523927070305419L;
-
 	
 	@Id
 	@Column(name = "username", unique = true, nullable = false, length = 45)
@@ -58,31 +56,26 @@ public class User implements Serializable
 			this.enabled = enabled;
 			this.roles = roles;
 		}
-	
+
 	public String getUsername() {
 		return username;
 	}
 
-
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	
-	
+
 	public String getPassword() {
 		return password;
 	}
-
 
 	public void setPassword(String password) {
 		this.password = password;
 	}
 	
-	
 	public boolean isEnabled() {
 		return enabled;
 	}
-
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;

@@ -3,30 +3,19 @@ package com.debatz.gifts.model;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.TableGenerator;
+import javax.persistence.*;
 
 @Entity
-@Table(name="GIFTS")
-public class Gift implements Serializable
-{
+@Table(name = "GIFTS")
+public class Gift implements Serializable {
     private static final long serialVersionUID = -3240452031165466075L;
-	
+
     @Id
-    @Column(nullable=false)
-    @TableGenerator(name = "giftSequence", allocationSize = 1, initialValue = 1) 
-    @GeneratedValue(strategy=GenerationType.TABLE, generator="giftSequence")
+    @Column(nullable = false)
+    @TableGenerator(name = "giftSequence", allocationSize = 1, initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "giftSequence")
     private Integer id;
-	
+
     @Column(name = "name", nullable = false, length = 70)
     private String name;
 
@@ -37,15 +26,18 @@ public class Gift implements Serializable
     @Column(name = "details", nullable = true, columnDefinition = "text")
     private String details;
 
-    @Column(name = "picture", length = 255)
+    @Column(name = "picture", length = 255, nullable = true)
     private String picture;
 
     @Column(name = "slug", unique = true, nullable = false)
     private String slug;
 
     @Column(name = "shoplinks", unique = false, nullable = true, length = 255)
-    @ElementCollection(fetch=FetchType.EAGER)
+    @ElementCollection
     private List<String> shopLinks;
+
+    @OneToOne
+    private User onlyViewer;
 
     @ManyToOne
     private User booker;
@@ -58,8 +50,7 @@ public class Gift implements Serializable
         super();
     }
 
-
-    public Gift(String name, String slug, String brand, String details, String picture, List<String> shopLinks, User owner) {
+    public Gift(String name, String slug, String brand, String details, String picture, List<String> shopLinks, User owner, User onlyViewer) {
         super();
 
         this.name = name;
@@ -69,6 +60,7 @@ public class Gift implements Serializable
         this.picture = picture;
         this.shopLinks = shopLinks;
         this.owner = owner;
+        this.onlyViewer = onlyViewer;
     }
 
     public Integer getId() {
@@ -143,6 +135,14 @@ public class Gift implements Serializable
         this.owner = owner;
     }
 
+    public User getOnlyViewer() {
+        return onlyViewer;
+    }
+
+    public void setOnlyViewer(User onlyViewer) {
+        this.onlyViewer = onlyViewer;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -157,27 +157,27 @@ public class Gift implements Serializable
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
-                return true;
+            return true;
         if (obj == null)
-                return false;
+            return false;
         if (getClass() != obj.getClass())
-                return false;
+            return false;
         Gift other = (Gift) obj;
         if (brand == null) {
-                if (other.brand != null)
-                        return false;
+            if (other.brand != null)
+                return false;
         } else if (!brand.equals(other.brand))
-                return false;
+            return false;
         if (id == null) {
-                if (other.id != null)
-                        return false;
+            if (other.id != null)
+                return false;
         } else if (!id.equals(other.id))
-                return false;
+            return false;
         if (name == null) {
-                if (other.name != null)
-                        return false;
-        } else if (!name.equals(other.name))
+            if (other.name != null)
                 return false;
+        } else if (!name.equals(other.name))
+            return false;
         return true;
     }
 
@@ -185,8 +185,8 @@ public class Gift implements Serializable
     @Override
     public String toString() {
         return "Gift [id=" + id + ", name=" + name + ", brand=" + brand
-            + ", details=" + details + ", picture=" + picture + ", slug="
-            + slug + ", shopLinks=" + shopLinks + ", booker=" + booker
-            + ", owner=" + owner + "]";
-}
+                + ", details=" + details + ", picture=" + picture + ", slug="
+                + slug + ", shopLinks=" + shopLinks + ", booker=" + booker
+                + ", owner=" + owner + "]";
+    }
 }
