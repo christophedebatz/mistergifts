@@ -85,7 +85,7 @@
                                                 <img src="<c:url value="/resources/pictures/cadna.png"/>" data-toggle="tooltip" data-placement="bottom" title="<spring:message code="site.page.grouplist.onlyviewercadna"/>">
                                                 &nbsp;
                                             </c:if>
-                                            <a href="<c:url value="/gift/${gift.slug}" />">${gift.name}</a>
+                                            <a about="w" href="<c:url value="/gift/${gift.slug}" />">${gift.name}</a>
                                         </td>
                                         <td>${gift.brand}</td>
                                         <td>

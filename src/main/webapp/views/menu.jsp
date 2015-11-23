@@ -15,7 +15,7 @@
 
         <a about="w" class="navbar-brand" href="<c:url value="/" />" data-toggle="tooltip" data-placement="bottom"
            title="<spring:message code="site.menu.home"/>">
-            <img src="<c:url value="/resources/pictures/rsz_gift.png" />"/>&nbsp; Mister Gifts
+            Mister&nbsp;&nbsp;<img src="<c:url value="/resources/pictures/rsz_gift.png" />"/>&nbsp; Gifts
         </a>
 
         <ul class="nav navbar-nav">
@@ -35,20 +35,12 @@
                     </a>
                 </li>
             </c:if>
-            <li<c:if test="${param.currentTab eq 'about'}"> class="active"</c:if>>
-                <a about="w" href="<c:url value="/about" />"<c:if
-                        test="${param.currentTab ne 'about'}"> data-toggle="tooltip" data-placement="bottom" title="<spring:message
-                        code="site.menu.about.tooltip"/>"</c:if>>
-                    <spring:message code="site.menu.about"/>
-                </a>
-            </li>
         </ul>
 
         <ul class="nav navbar-nav pull-right">
-
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                   aria-expanded="false"><spring:message code="site.menu.language"/> <span class="caret"></span></a>
+                <a href="#" data-placement="bottom" title="<spring:message code="site.menu.language.tooltip"/>" class="dropdown-toggle language-menu" role="button" aria-haspopup="true"
+                   aria-expanded="false" data-toggle="dropdown"><span class="glyphicon glyphicon-globe" aria-hidden="true"></a>
                 <ul class="dropdown-menu">
                     <li>
                         <a href="<c:url value="${baseURL}"><c:param name="lang" value="fr"/></c:url>" about="w">
@@ -63,12 +55,19 @@
                 </ul>
             </li>
 
+            <li<c:if test="${param.currentTab eq 'about'}"> class="active"</c:if>>
+                <a about="w" href="<c:url value="/about" />"<c:if
+                        test="${param.currentTab ne 'about'}"> data-toggle="tooltip" data-placement="bottom" title="<spring:message
+                        code="site.menu.about.tooltip"/>"</c:if>>
+                    <span class="glyphicon glyphicon-info-sign"></span>
+                </a>
+            </li>
+
             <c:choose>
                 <c:when test="${pageContext.request.userPrincipal.name == null}">
                     <li<c:if test="${param.currentTab eq 'login'}"> class="active"</c:if>>
                         <a href="<c:url value="/login" />" data-toggle="tooltip" data-placement="bottom" about="w"
-                           title="<spring:message code="site.menu.login.tooltip"/>">
-                            <spring:message code="site.menu.login"/>
+                           title="<spring:message code="site.menu.login.tooltip"/>"><span class="glyphicon glyphicon-off"></span>
                         </a>
                     </li>
                 </c:when>
@@ -77,7 +76,7 @@
                     <li>
                         <a href="javascript: $('#logoutForm').submit();" data-toggle="tooltip" data-placement="bottom"
                            title="<spring:message code="site.menu.logout.tooltip"/>" about="w">
-                            <spring:message code="site.menu.logout"/> (${pageContext.request.userPrincipal.name})
+                            <span class="glyphicon glyphicon-off"></span> &nbsp;${pageContext.request.userPrincipal.name}
                         </a>
                     </li>
                 </c:otherwise>

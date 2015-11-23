@@ -17,8 +17,10 @@
 				<legend>${selectedGift.name}</legend>
 				
 				<c:if test="${not empty selectedGift.picture}">
-					<img src="/uploads/${selectedGift.picture}" title="${selectedGift.brand} ${selectedGift.name}" style="float: right;" />
-				</c:if>
+                    <div id="details-picture">
+					    <img src="/uploads/${selectedGift.picture}" title="${selectedGift.brand} ${selectedGift.name}" />
+                    </div>
+                </c:if>
 
 				<h4><span class="label label-default"><spring:message code="site.page.details.brand"/></span></h4>
 				<p>${selectedGift.brand}</p>
@@ -33,7 +35,7 @@
 						</span></h4>
 						<ul style="list-style-type: none;">
 							<c:forEach items="${selectedGift.shopLinks}" var="link">
-								<li><span class="glyphicon glyphicon-link"> <a class="link-list" href="${link}" target="_blank">${fn:substring(link, 0, 80)}...</a></span></li>
+								<li><span class="glyphicon glyphicon-link"> <a class="link-list" href="${link}" target="_blank">${fn:substring(link, 0, 120)}...</a></span></li>
 							</c:forEach>
 						</ul>
 					</c:if>

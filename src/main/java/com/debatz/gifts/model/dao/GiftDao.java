@@ -1,6 +1,7 @@
 package com.debatz.gifts.model.dao;
 
 import java.util.Arrays;
+import java.util.List;
 
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -14,6 +15,17 @@ public class GiftDao extends AbstractDao<Gift, Integer>
 {
 	public GiftDao() {
 		super(Gift.class);
+	}
+
+	@Transactional(readOnly = true)
+	public int[] getStatitics()
+	{
+		List<Gift> globalGifts = this.em.createQuery("select g from Gift g", Gift.class).getResultList();
+
+		int globalGiftsCount = globalGifts.size();
+		int directGiftsCount = (int) globalGifts.stream().filter(g -> g.getOnlyViewer() != null).count();
+
+		return new int[] { globalGiftsCount, directGiftsCount };
 	}
 
 	@Transactional(readOnly = true)

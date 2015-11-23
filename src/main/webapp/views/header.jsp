@@ -1,12 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
+<%@ page language="java" session="true" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@page session="true"%>
-
-<html lang="en">
+<html lang="fr">
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-		<meta name="generator" content="Bootply" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<meta charset="utf-8">
 		
@@ -22,10 +19,6 @@
 		<![endif]-->
 
         <style>
-            #page {
-                display: none;
-            }
-
             #loading {
                 display: block;
                 position: absolute;

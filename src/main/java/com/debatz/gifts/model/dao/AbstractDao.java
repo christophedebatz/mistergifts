@@ -28,7 +28,7 @@ public abstract class AbstractDao<T, K>
         return entity;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public int getNextSequence() {
         return this.em.unwrap(Session.class)
                 .getNextSequenceNumberValue(this.entityClass)

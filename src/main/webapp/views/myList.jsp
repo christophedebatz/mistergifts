@@ -49,7 +49,7 @@
 									<c:if test="${gift.onlyViewer != null}">
 										<img src="<c:url value="/resources/pictures/cadna.png" />" data-toggle="tooltip" data-placement="bottom" title="<spring:message code="site.page.mylist.onlyviewercadna" arguments="${gift.onlyViewer.username}"/>">&nbsp;
 									</c:if>
-									<a href="<c:url value="/gift/${gift.slug}" />">
+									<a about="w" href="<c:url value="/gift/${gift.slug}" />">
 									<c:choose>
 										<c:when test="${fn:length(gift.name) > 20 }">
 											${fn:substring(gift.name, 0, 20)}...
@@ -147,19 +147,14 @@
 				</div>
 
 				<div style="float: right; margin-bottom: 10px;" class="btn-group">
-					<button type="button" onclick="addLink();"
-						class="btn btn-xs btn-success"><spring:message code="site.page.mylist.form.add"/></button>
-					<button type="button" onclick="removeLink();"
-						class="btn btn-xs btn-danger"><spring:message code="site.page.mylist.form.remove"/></button>
+					<button type="button" onclick="addLink();" class="btn btn-xs btn-success"><spring:message code="site.page.mylist.form.add"/></button>
+					<button type="button" onclick="removeLink();" class="btn btn-xs btn-danger"><spring:message code="site.page.mylist.form.remove"/></button>
 				</div>
 
 				<div class="form-group">
 					<div id="TextBoxesGroup">
 						<div id="TextBoxDiv1">
-							<input type="text" name="shoplink" id="shoplink1"
-								class="form-control"
-								style="margin-bottom: 2px; margin-top: 2px;"
-								placeholder="<spring:message code="site.page.mylist.form.shoplink"/>1..." />
+							<input type="text" name="shoplink" id="shoplink1" class="form-control" style="margin-bottom: 2px; margin-top: 2px;" placeholder="<spring:message code="site.page.mylist.form.shoplink"/>1..." />
 						</div>
 					</div>
 				</div>
@@ -168,7 +163,11 @@
 					value="${_csrf.token}" />
 			</fieldset>
 
-			<input type="submit" value="<spring:message code="site.page.mylist.form.validate"/>" class="btn btn-large btn-primary" />
+			<img src="<c:url value="/resources/pictures/action-loader.gif" />" alt="Wait..." id="waiter"
+				 style="padding:5px; display:none;"/>
+			<input type="submit" class="btn btn-large btn-primary"
+				   onclick="this.style.display='none'; document.getElementById('waiter').style.display='block';"
+				   value="<spring:message code="site.page.mylist.form.validate"/>"/>
 
 		</form>
 
@@ -184,13 +183,9 @@
 			return;
 		}
 
-		var newTextBoxDiv = $(document.createElement('div')).attr("id",
-				'TextBoxDiv' + counter);
+		var newTextBoxDiv = $(document.createElement('div')).attr("id", 'TextBoxDiv' + counter);
 
-		newTextBoxDiv
-				.after()
-				.html(
-						'<input style="margin-bottom: 2px; margin-top: 2px;" type="text" name="shoplink" id="shoplink' + counter + '" class="form-control" placeholder="<spring:message code="site.page.mylist.form.shoplink"/>' + counter + '..." />');
+		newTextBoxDiv.after().html('<input style="margin-bottom: 2px; margin-top: 2px;" type="text" name="shoplink" id="shoplink' + counter + '" class="form-control" placeholder="<spring:message code="site.page.mylist.form.shoplink"/>' + counter + '..." />');
 		newTextBoxDiv.appendTo("#TextBoxesGroup");
 
 		counter++;

@@ -8,8 +8,6 @@ import com.debatz.gifts.model.dao.UserDao;
 import com.debatz.gifts.service.FileService;
 import com.debatz.gifts.service.RemoteUploadService;
 import com.debatz.gifts.service.SlugService;
-import net.coobird.thumbnailator.Thumbnails;
-import net.coobird.thumbnailator.name.Rename;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -30,9 +26,9 @@ public class ListController extends ControllerBase
 {
     private static final Logger logger = LogManager.getLogger(RemoteUploadService.class);
 
-    //private static final String UPLOADS_DIRECTORY = "/home/pi/uploads/mistergifts/";
+    private static final String UPLOADS_DIRECTORY = "/home/pi/uploads/mistergifts/";
 
-    private static final String UPLOADS_DIRECTORY = "/Users/christophedebatz/Documents/workspace/MisterGifts/uploads/";
+    //private static final String UPLOADS_DIRECTORY = "/Users/christophedebatz/Documents/workspace/MisterGifts/uploads/";
 
     @Autowired
     private SessionBean sessionBean;
@@ -142,10 +138,6 @@ public class ListController extends ControllerBase
             try {
                 RemoteUploadService
                         .save(picture, uploadLocalPath);
-
-                Thumbnails.of(uploadLocalPath)
-                        .size(450, 600)
-                        .toFiles(new File(UPLOADS_DIRECTORY), Rename.NO_CHANGE);
 
                 hasError = false;
 

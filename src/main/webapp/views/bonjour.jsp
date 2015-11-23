@@ -6,9 +6,19 @@
 
 <div class="container">
   <div class="jumbotron text-center">
+
     <h1>Mister Gifts</h1>
-    <p class="lead" style="margin-top: 25px;"><spring:message code="site.page.home.description"/></p>
-    
+
+    <p class="lead" style="margin-top: 25px;">
+      <spring:message code="site.page.home.description"/>
+    </p>
+
+    <c:if test="${not empty globalGiftsCount && not empty directGiftsCount}">
+        <p class="lead" style="margin-top: 25px;">
+            En ce moment, <b>${globalGiftsCount}</b> cadeau(x) dont <b>${directGiftsCount}</b> personnel(s).
+        </p>
+    </c:if>
+
     <p style="text-align: center;">
     	<img src="<c:url value="/resources/pictures/biggift.png" />" />
     </p>
