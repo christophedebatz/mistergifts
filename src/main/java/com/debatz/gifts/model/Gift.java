@@ -1,7 +1,9 @@
 package com.debatz.gifts.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.*;
 
@@ -36,6 +38,13 @@ public class Gift implements Serializable {
     @ElementCollection
     private List<String> shopLinks;
 
+    @Column(updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date creationDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date modificationDate;
+
     @OneToOne
     private User onlyViewer;
 
@@ -44,7 +53,6 @@ public class Gift implements Serializable {
 
     @ManyToOne
     private User owner;
-
 
     public Gift() {
         super();
@@ -143,50 +151,51 @@ public class Gift implements Serializable {
         this.onlyViewer = onlyViewer;
     }
 
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public Date getModificationDate() {
+        return modificationDate;
+    }
+
+    public void setModificationDate(Date modificationDate) {
+        this.modificationDate = modificationDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Gift gift = (Gift) o;
+        return Objects.equals(id, gift.id) &&
+                Objects.equals(name, gift.name) &&
+                Objects.equals(brand, gift.brand);
+    }
+
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((brand == null) ? 0 : brand.hashCode());
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        return result;
+        return Objects.hash(id, name, brand);
     }
-
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Gift other = (Gift) obj;
-        if (brand == null) {
-            if (other.brand != null)
-                return false;
-        } else if (!brand.equals(other.brand))
-            return false;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        if (name == null) {
-            if (other.name != null)
-                return false;
-        } else if (!name.equals(other.name))
-            return false;
-        return true;
-    }
-
 
     @Override
     public String toString() {
-        return "Gift [id=" + id + ", name=" + name + ", brand=" + brand
-                + ", details=" + details + ", picture=" + picture + ", slug="
-                + slug + ", shopLinks=" + shopLinks + ", booker=" + booker
-                + ", owner=" + owner + "]";
+        return "Gift{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", brand='" + brand + '\'' +
+                ", details='" + details + '\'' +
+                ", picture='" + picture + '\'' +
+                ", slug='" + slug + '\'' +
+                ", shopLinks=" + shopLinks +
+                ", creationDate=" + creationDate +
+                ", onlyViewer=" + onlyViewer +
+                ", booker=" + booker +
+                ", owner=" + owner +
+                '}';
     }
 }

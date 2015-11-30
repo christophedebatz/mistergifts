@@ -39,6 +39,7 @@
 								<th><spring:message code="site.page.mylist.tableheader.brand"/></th>
 								<th><spring:message code="site.page.mylist.tableheader.details"/></th>
 								<th>&nbsp;</th>
+								<th>&nbsp;</th>
 							</tr>
 						</thead>
 
@@ -71,8 +72,8 @@
 								</td>
 								<td>
 									<c:choose>
-										<c:when test="${fn:length(gift.details) > 47 }">
-											${fn:substring(gift.details, 0, 47)}...
+										<c:when test="${fn:length(gift.details) > 43 }">
+											${fn:substring(gift.details, 0, 40)}...
 										</c:when>
 										<c:otherwise>
 											${gift.details}
@@ -80,17 +81,23 @@
 									</c:choose>
 								</td>
 								<td>
-									<c:choose>
-										<c:when test="${gift.booker ne null}"><spring:message code="site.page.mylist.unremovable"/></c:when>
-										<c:otherwise>
-											<form action="<c:url value="/gift" />" method="post">
-												<input type="hidden" name="giftId" value="${gift.id}" />
-												<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-												<input type="submit" class="btn btn-xs btn-danger" value="<spring:message code="site.page.mylist.remove"/>" />
-											</form>
-										</c:otherwise>
-									</c:choose>
-									
+									<c:if test="${gift.booker eq null}">
+										<form action="<c:url value="/mylist/${gift.id}" />" method="post" onsubmit="window.alert('Not implemented yet.'); return false;">
+											<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+											<label for="submitUpdate" class="btn btn-xs btn-default" data-toggle="tooltip" data-placement="top" title="Update gift"><i class="glyphicon glyphicon-edit"></i></label>
+											<input id="submitUpdate" type="submit" class="hidden" />
+										</form>
+									</c:if>
+								</td>
+								<td>
+									<c:if test="${gift.booker eq null}">
+										<form action="<c:url value="/gift/${gift.id}" />" method="post">
+											<input type="hidden" name="giftId" value="${gift.id}" />
+											<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+											<label for="submitDelete" class="btn btn-xs btn-danger" data-toggle="tooltip" data-placement="top" title="Remove gift"><i class="glyphicon glyphicon-trash"></i></label>
+											<input id="submitDelete" type="submit" class="hidden" />
+										</form>
+									</c:if>
 									</td>
 								</tr>
 

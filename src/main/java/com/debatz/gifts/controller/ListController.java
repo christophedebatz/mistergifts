@@ -1,5 +1,6 @@
 package com.debatz.gifts.controller;
 
+import com.debatz.gifts.Pair;
 import com.debatz.gifts.bean.SessionBean;
 import com.debatz.gifts.model.Gift;
 import com.debatz.gifts.model.User;
@@ -12,11 +13,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -111,17 +114,105 @@ public class ListController extends ControllerBase
         return model;
     }
 
-    @RequestMapping(value = "/mylist", method = RequestMethod.POST)
+    @RequestMapping(value = "/mylist/{giftId}", method = RequestMethod.POST)
     public ModelAndView myListPageUpdate(
+            @PathVariable(value = "giftId") final Integer giftId,
             @RequestParam(value = "name", required = true) String name,
-            @RequestParam(value = "brand", required = true) String brand,
+            @RequestParam(value = "brand", required = false) String brand,
             @RequestParam(value = "details", required = false) String details,
             @RequestParam(value = "picture", required = false) String picture,
             @RequestParam(value = "shoplink", required = false) List<String> shoplinks,
             @RequestParam(value = "onlyViewer", required = false) String onlyViewer) {
 
-        boolean hasError = true;
+        Pair<String, Boolean> uploadResult = this.uploadPicture(picture);
+        String pictureLocalPath = uploadResult.getFirst();
+        boolean hasError = uploadResult.getSecond();
+
+        if (!hasError) {
+            try {
+                User currentUser = this.userDao.findByUserName(this.sessionBean.getUsername());
+                User onlyViewerUser = this.userDao.findByUserName(onlyViewer);
+                Gift updatedGift = this.giftDao.find(giftId);
+
+                if (updatedGift == null) {
+                    hasError = true;
+                }
+                else {
+                    updatedGift.setName(name.substring(0, 1).toUpperCase() + name.substring(1));
+                    updatedGift.setSlug(SlugService.getSlug(this.giftDao.getNextSequence() + " " + brand + " " + name));
+                    updatedGift.setBrand(brand.toUpperCase());
+                    updatedGift.setDetails(details.length() == 0 ? null : details.substring(0, 1).toUpperCase() + details.substring(1));
+                    updatedGift.setPicture(pictureLocalPath);
+                    updatedGift.setShopLinks(shoplinks);
+                    updatedGift.setOwner(currentUser);
+                    updatedGift.setOnlyViewer(onlyViewerUser);
+                    updatedGift.setModificationDate(new Date());
+
+                    this.userDao.update(currentUser);
+                    hasError = false;
+                }
+            } catch (Exception ex) {
+                logger.debug(ex.getMessage(), ex);
+                hasError = true;
+            }
+        }
+
+        ModelAndView model = new ModelAndView();
+        model.setViewName("redirect:/mylist" + (hasError ? "?error" : ""));
+
+        return model;
+    }
+
+    @RequestMapping(value = "/mylist", method = RequestMethod.POST)
+    public ModelAndView myListPageInsert(
+            @RequestParam(value = "name", required = true) String name,
+            @RequestParam(value = "brand", required = false) String brand,
+            @RequestParam(value = "details", required = false) String details,
+            @RequestParam(value = "picture", required = false) String picture,
+            @RequestParam(value = "shoplink", required = false) List<String> shoplinks,
+            @RequestParam(value = "onlyViewer", required = false) String onlyViewer) {
+
+        Pair<String, Boolean> uploadResult = this.uploadPicture(picture);
+        String pictureLocalPath = uploadResult.getFirst();
+        boolean hasError = uploadResult.getSecond();
+
+        if (!hasError) {
+            try {
+                User currentUser    = this.userDao.findByUserName(this.sessionBean.getUsername());
+                User onlyViewerUser = this.userDao.findByUserName(onlyViewer);
+
+                Gift owned = new Gift();
+                Date now = new Date();
+                owned.setName(name.substring(0, 1).toUpperCase() + name.substring(1));
+                owned.setSlug(SlugService.getSlug(this.giftDao.getNextSequence() + " " + brand + " " + name));
+                owned.setBrand(brand.toUpperCase());
+                owned.setDetails(details.length() == 0 ? null : details.substring(0, 1).toUpperCase() + details.substring(1));
+                owned.setPicture(pictureLocalPath);
+                owned.setShopLinks(shoplinks);
+                owned.setOwner(currentUser);
+                owned.setOnlyViewer(onlyViewerUser);
+                owned.setCreationDate(now);
+                owned.setModificationDate(now);
+                currentUser.addOwnedGift(owned);
+
+                this.userDao.update(currentUser);
+                hasError = false;
+
+            } catch (Exception ex) {
+                logger.debug(ex.getMessage(), ex);
+                hasError = true;
+            }
+        }
+
+        ModelAndView model = new ModelAndView();
+        model.setViewName("redirect:/mylist" + (hasError ? "?error" : ""));
+
+        return model;
+    }
+
+    private Pair<String, Boolean> uploadPicture(String picture) {
         String pictureLocalPath = null;
+        boolean hasError = true;
 
         if (picture == null || picture.equals("")) {
             hasError = false;
@@ -136,9 +227,7 @@ public class ListController extends ControllerBase
             String uploadLocalPath = UPLOADS_DIRECTORY + pictureLocalPath;
 
             try {
-                RemoteUploadService
-                        .save(picture, uploadLocalPath);
-
+                RemoteUploadService.save(picture, uploadLocalPath);
                 hasError = false;
 
             } catch (Exception ex) {
@@ -146,34 +235,6 @@ public class ListController extends ControllerBase
             }
         }
 
-        if (!hasError)
-        {
-            try {
-                User currentUser = this.userDao.findByUserName(this.sessionBean.getUsername());
-                User onlyViewerUser = this.userDao.findByUserName(onlyViewer);
-
-                Gift owned = new Gift();
-                owned.setName(name.substring(0, 1).toUpperCase() + name.substring(1));
-                owned.setSlug(SlugService.getSlug(this.giftDao.getNextSequence() + " " + brand + " " + name));
-                owned.setBrand(brand.toUpperCase());
-                owned.setDetails(details.length() == 0 ? null : details.substring(0, 1).toUpperCase() + details.substring(1));
-                owned.setPicture(pictureLocalPath);
-                owned.setShopLinks(shoplinks);
-                owned.setOwner(currentUser);
-                owned.setOnlyViewer(onlyViewerUser);
-
-                currentUser.addOwnedGift(owned);
-                this.userDao.update(currentUser);
-                hasError = false;
-
-            } catch (Exception ex) {
-                logger.debug(ex.getMessage(), ex);
-            }
-        }
-
-        ModelAndView model = new ModelAndView();
-        model.setViewName("redirect:/mylist" + (hasError ? "?error" : ""));
-
-        return model;
+        return new Pair<>(pictureLocalPath, hasError);
     }
 }

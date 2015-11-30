@@ -37,8 +37,8 @@ public class GiftController extends ControllerBase
         return model;
     }
 
-    @RequestMapping(value = "/gift", method = RequestMethod.POST)
-    public ModelAndView myListGiftPage(@RequestParam(value = "giftId", required = true) int giftId) throws Exception
+    @RequestMapping(value = "/gift/{giftId}", method = RequestMethod.POST)
+    public ModelAndView removeGift(@PathVariable(value = "giftId") final Integer giftId) throws Exception
     {
         Gift giftToRemove = this.giftDao.find(giftId);
         User currentUser = this.userDao.findByUserName(this.sessionBean.getUsername());
@@ -46,11 +46,7 @@ public class GiftController extends ControllerBase
         if (giftToRemove != null && giftToRemove.getBooker() == null
                 && currentUser.getUsername().equals(giftToRemove.getOwner().getUsername())) {
             List<Gift> userGifts = currentUser.getOwnedGifts();
-
-            if (!userGifts.remove(giftToRemove)) {
-                throw new Exception("Unable to remove gift in user gifts list.");
-            }
-
+            userGifts.remove(giftToRemove);
             currentUser.setOwnedGifts(userGifts);
             this.giftDao.remove(giftToRemove.getId());
             this.userDao.update(currentUser);

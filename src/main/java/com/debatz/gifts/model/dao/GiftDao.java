@@ -18,9 +18,9 @@ public class GiftDao extends AbstractDao<Gift, Integer>
 	}
 
 	@Transactional(readOnly = true)
-	public int[] getStatitics()
+	public int[] getStatistics()
 	{
-		List<Gift> globalGifts = this.em.createQuery("select g from Gift g", Gift.class).getResultList();
+		List<Gift> globalGifts = this.em.createQuery("select g from Gift g", this.entityClass).getResultList();
 
 		int globalGiftsCount = globalGifts.size();
 		int directGiftsCount = (int) globalGifts.stream().filter(g -> g.getOnlyViewer() != null).count();

@@ -29,10 +29,10 @@ public class User implements Serializable
 	@Column(name = "enabled", nullable = false)
     private boolean enabled;
     
-    @OneToMany(mappedBy="owner", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy="owner", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private List<Gift> ownedGifts = new ArrayList<Gift>();
    
-    @OneToMany(mappedBy="booker", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy="booker", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private List<Gift> bookedGifts = new ArrayList<Gift>();
     
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)

@@ -17,7 +17,7 @@ public class HomeController extends ControllerBase
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public ModelAndView defaultPage()
     {
-        int[] stats = this.giftDao.getStatitics();
+        int[] stats = this.giftDao.getStatistics();
 
         ModelAndView model = new ModelAndView();
 
