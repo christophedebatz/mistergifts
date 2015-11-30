@@ -38,7 +38,7 @@
                         <table class="table table-hover">
                             <thead>
                             <tr>
-                                <th><spring:message code="site.page.grouplist.username"/></th>
+                                <th>&nbsp;</th>
                                 <th><spring:message code="site.page.grouplist.giftname"/></th>
                                 <th><spring:message code="site.page.grouplist.giftbrand"/></th>
                                 <th><spring:message code="site.page.grouplist.booker"/></th>

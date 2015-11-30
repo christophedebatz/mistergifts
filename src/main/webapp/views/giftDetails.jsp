@@ -22,14 +22,18 @@
                     </div>
                 </c:if>
 
-				<h4><span class="label label-default"><spring:message code="site.page.details.brand"/></span></h4>
-				<p>${selectedGift.brand}</p>
+				<c:if test="${not empty selectedGift.brand}">
+					<h4><span class="label label-default"><spring:message code="site.page.details.brand"/></span></h4>
+					<p>${selectedGift.brand}</p>
+				</c:if>
 
-				<h4><span class="label label-default"><spring:message code="site.page.details.details"/></span></h4>
-				<p>${selectedGift.details}</p>
-				
-				<div style="margin-top: 40px;">
-					<c:if test="${not empty selectedGift.shopLinks}">
+				<c:if test="${not empty selectedGift.details}">
+					<h4><span class="label label-default"><spring:message code="site.page.details.details"/></span></h4>
+					<p>${selectedGift.details}</p>
+				</c:if>
+
+				<c:if test="${not empty selectedGift.shopLinks}">
+					<div style="margin-top: 40px;">
 						<h4><span class="label label-default">
 							<spring:message code="site.page.details.shoplinks"/>
 						</span></h4>
@@ -38,8 +42,8 @@
 								<li><span class="glyphicon glyphicon-link"> <a class="link-list" href="${link}" target="_blank">${fn:substring(link, 0, 120)}...</a></span></li>
 							</c:forEach>
 						</ul>
-					</c:if>
-				</div>
+					</div>
+				</c:if>
 			</c:when>
 				
 			<c:otherwise>
