@@ -71,7 +71,7 @@
                 <ul type="disc" style="text-align: left; margin: 0; font-size: 15px;">
                     <li>Possibilité de modifier un cadeau de sa liste</li>
                     <li>Possibilité de participer à un cadeau (% ou montant fixe)</li>
-                    <li>Possibilité de proposer un cadeau pour un utilisateur, celui-ci sera visible par les autres mais pas par l'utilisateur visé</li>
+                    <li>Possibilité de proposer un cadeau pour un utilisateur. Il sera visible par les autres uniquement)</li>
                     <li>Possibilité d'importer et d'exporter sa liste et les listes des autres (format Excel principalement)</li>
                     <li>Possibilité de voir la liste d'un seul utilisateur</li>
                 </ul>
