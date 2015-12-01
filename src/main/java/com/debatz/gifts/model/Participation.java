@@ -6,7 +6,7 @@ import java.io.Serializable;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "USER_GIFT",
+@Table(name = "PARTICIPATION",
         uniqueConstraints = @UniqueConstraint(
                 columnNames = { "role", "username" })
 )
@@ -23,20 +23,11 @@ public class Participation implements Serializable {
     @JoinColumn(name = "username", nullable = false)
     private User user;
 
-    @Column(name = "gift", nullable = false, length = 45)
-    private Gift gift;
-
     @Column(nullable = false)
-    private int participation;
+    private int participation = 0;
 
 
     public Participation() {
-    }
-
-    public Participation(User user, Gift gift, int participation) {
-        this.user = user;
-        this.gift = gift;
-        this.participation = participation;
     }
 
     public Integer getId() {
@@ -53,14 +44,6 @@ public class Participation implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public Gift getGift() {
-        return gift;
-    }
-
-    public void setGift(Gift gift) {
-        this.gift = gift;
     }
 
     public int getParticipation() {
