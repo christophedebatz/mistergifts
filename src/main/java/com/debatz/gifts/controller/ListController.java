@@ -139,7 +139,7 @@ public class ListController extends ControllerBase
                 }
                 else {
                     updatedGift.setName(name.substring(0, 1).toUpperCase() + name.substring(1));
-                    updatedGift.setSlug(SlugService.getSlug(this.giftDao.getNextSequence() + " " + brand + " " + name));
+                    updatedGift.setSlug(SlugService.getSlug(updatedGift.getId(), name, brand));
                     updatedGift.setBrand(brand.toUpperCase());
                     updatedGift.setDetails(details.length() == 0 ? null : details.substring(0, 1).toUpperCase() + details.substring(1));
                     updatedGift.setPicture(pictureLocalPath);
@@ -181,10 +181,13 @@ public class ListController extends ControllerBase
                 User currentUser    = this.userDao.findByUserName(this.sessionBean.getUsername());
                 User onlyViewerUser = this.userDao.findByUserName(onlyViewer);
 
+                int id = this.giftDao.getNextSequence();
+
                 Gift owned = new Gift();
                 Date now = new Date();
+                owned.setId(id);
                 owned.setName(name.substring(0, 1).toUpperCase() + name.substring(1));
-                owned.setSlug(SlugService.getSlug(this.giftDao.getNextSequence() + " " + brand + " " + name));
+                owned.setSlug(SlugService.getSlug(id, name, brand));
                 owned.setBrand(brand.toUpperCase());
                 owned.setDetails(details.length() == 0 ? null : details.substring(0, 1).toUpperCase() + details.substring(1));
                 owned.setPicture(pictureLocalPath);

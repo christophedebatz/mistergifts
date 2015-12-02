@@ -26,4 +26,19 @@ public class SlugService
 	    
 	    return slug.toLowerCase(Locale.FRANCE);
 	}
+
+	public static String getSlug(int id, String name, String brand) {
+		StringBuilder slugInput = new StringBuilder();
+		slugInput.append(id);
+		slugInput.append(" ");
+
+		if (brand != null && brand.length() > 0) {
+			slugInput.append(brand);
+			slugInput.append(" ");
+		}
+
+		slugInput.append(name);
+
+		return getSlug(slugInput.toString());
+	}
 }

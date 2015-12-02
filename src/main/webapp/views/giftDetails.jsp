@@ -2,6 +2,7 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <jsp:include page="header.jsp"></jsp:include>
 
@@ -21,6 +22,9 @@
 					    <img src="/uploads/${selectedGift.picture}" title="${selectedGift.brand} ${selectedGift.name}" />
                     </div>
                 </c:if>
+
+				<h4><span class="label label-default">Date de création</span></h4>
+				<p><fmt:formatDate type="both" timeStyle="short" dateStyle="short" value="${selectedGift.creationDate}"/></p>
 
 				<c:if test="${not empty selectedGift.brand}">
 					<h4><span class="label label-default"><spring:message code="site.page.details.brand"/></span></h4>

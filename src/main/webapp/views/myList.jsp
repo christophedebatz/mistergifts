@@ -52,8 +52,8 @@
 									</c:if>
 									<a about="w" href="<c:url value="/gift/${gift.slug}" />">
 									<c:choose>
-										<c:when test="${fn:length(gift.name) > 20 }">
-											${fn:substring(gift.name, 0, 20)}...
+										<c:when test="${fn:length(gift.name) > 23 }">
+											${fn:substring(gift.name, 0, 25)}...
 										</c:when>
 										<c:otherwise>
 											${gift.name}
@@ -62,6 +62,9 @@
 								</a></td>
 								<td>
 									<c:choose>
+										<c:when test="${gift.brand eq '' }">
+											<span style="text-align: center;">-</span>
+										</c:when>
 										<c:when test="${fn:length(gift.brand) > 20 }">
 											${fn:substring(gift.brand, 0, 20)}...
 										</c:when>
@@ -72,15 +75,15 @@
 								</td>
 								<td>
 									<c:choose>
-										<c:when test="${fn:length(gift.details) > 43 }">
-											${fn:substring(gift.details, 0, 40)}...
+										<c:when test="${fn:length(gift.details) > 40 }">
+											${fn:substring(gift.details, 0, 38)}...
 										</c:when>
 										<c:otherwise>
 											${gift.details}
 										</c:otherwise>
 									</c:choose>
 								</td>
-								<td>
+								<td width="20">
 									<c:if test="${gift.booker eq null}">
 										<form action="<c:url value="/mylist/${gift.id}" />" method="post" onsubmit="window.alert('Not implemented yet.'); return false;">
 											<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
@@ -89,7 +92,7 @@
 										</form>
 									</c:if>
 								</td>
-								<td>
+								<td width="20">
 									<c:if test="${gift.booker eq null}">
 										<form action="<c:url value="/gift/${gift.id}" />" method="post">
 											<input type="hidden" name="giftId" value="${gift.id}" />

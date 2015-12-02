@@ -3,6 +3,7 @@ package com.debatz.gifts.model.dao;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -17,6 +18,11 @@ public class UserDao extends AbstractDao<User, Integer>
 {
 	public UserDao() {
 		super(User.class);
+	}
+
+	@PostConstruct
+	public void initialize() {
+		this.clearCache();
 	}
 
 	@Transactional
@@ -42,7 +48,12 @@ public class UserDao extends AbstractDao<User, Integer>
 	}
 
 	@Transactional(readOnly = true)
-	public User findByUserName(String username) {	
+	public User findByUserName(String username) {
 		return this.em.find(User.class, username);
+	}
+
+	private void clearCache() {
+		this.em.clear();
+		this.em.getEntityManagerFactory().getCache().evictAll();
 	}
 }

@@ -23,7 +23,9 @@
  
         <access-denied-handler error-page="/login?denied" />
 
-        <form-login login-page="/login" default-target-url="/mylist" 
+        <form-login login-page="/login"
+                    default-target-url="/mylist"
+                    always-use-default-target="false"
                     authentication-success-handler-ref="authenticationSuccessHandler" 
                     authentication-failure-url="/login?error" 
                     username-parameter="username"

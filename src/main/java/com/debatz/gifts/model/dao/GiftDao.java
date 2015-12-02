@@ -3,6 +3,7 @@ package com.debatz.gifts.model.dao;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import com.debatz.gifts.model.Gift;
