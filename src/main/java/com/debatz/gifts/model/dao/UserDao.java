@@ -22,12 +22,15 @@ public class UserDao extends AbstractDao<User, Integer>
 
 	@PostConstruct
 	public void initialize() {
-		this.clearCache();
+		this.em.clear();
+		this.em.getEntityManagerFactory().getCache().evictAll();
 	}
 
 	@Transactional
 	public List<User> getUsers() {
 		Query query = this.em.createQuery("select u from User u");
+		query.setHint("javax.persistence.cache.retrieveMode", "BYPASS");
+
 		try {
 			return (List<User>) query.getResultList();
 		} catch (Exception ex) {
@@ -50,10 +53,5 @@ public class UserDao extends AbstractDao<User, Integer>
 	@Transactional(readOnly = true)
 	public User findByUserName(String username) {
 		return this.em.find(User.class, username);
-	}
-
-	private void clearCache() {
-		this.em.clear();
-		this.em.getEntityManagerFactory().getCache().evictAll();
 	}
 }

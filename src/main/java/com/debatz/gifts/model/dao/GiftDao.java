@@ -18,6 +18,12 @@ public class GiftDao extends AbstractDao<Gift, Integer>
 		super(Gift.class);
 	}
 
+	@PostConstruct
+	public void initialize() {
+		this.em.clear();
+		this.em.getEntityManagerFactory().getCache().evictAll();
+	}
+
 	@Transactional(readOnly = true)
 	public int[] getStatistics()
 	{
