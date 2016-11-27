@@ -16,9 +16,7 @@ public class MailService
     }
 
     public void send(String from, String to, String subject, String msg) {
-
         SimpleMailMessage message = new SimpleMailMessage();
-
         message.setFrom(from);
         message.setTo(to);
         message.setSubject(subject);
