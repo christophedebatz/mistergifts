@@ -29,7 +29,7 @@ public class ListController extends ControllerBase
 {
     private static final Logger logger = LogManager.getLogger(RemoteUploadService.class);
 
-    private static final String UPLOADS_DIRECTORY = "/home/pi/uploads/mistergifts/";
+    private static final String UPLOADS_DIRECTORY = "/home/mgadmin/uploads_old";
 
     //private static final String UPLOADS_DIRECTORY = "/Users/christophedebatz/Documents/workspace/MisterGifts/uploads/";
 
