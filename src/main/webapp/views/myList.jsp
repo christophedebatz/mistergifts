@@ -47,8 +47,8 @@
 
 							<tr>
 								<td>
-									<c:if test="${gift.onlyViewer != null}">
-										<img src="<c:url value="/resources/pictures/cadna.png" />" data-toggle="tooltip" data-placement="bottom" title="<spring:message code="site.page.mylist.onlyviewercadna" arguments="${gift.onlyViewer.username}"/>">&nbsp;
+									<c:if test="${gift.viewers != null && gift.viewers.size() > 0}">
+										<img src="<c:url value="/resources/pictures/cadna.png" />" data-toggle="tooltip" data-placement="bottom" title="<spring:message code="site.page.mylist.onlyviewercadna" arguments="${gift.viewers.size() }" />">&nbsp;
 									</c:if>
 									<a about="w" href="<c:url value="/gift/${gift.slug}" />">
 									<c:choose>
@@ -136,7 +136,7 @@
 			<fieldset>
 				<legend><spring:message code="site.page.mylist.form.onlyviewertitle"/></legend>
 				<div class="form-group">
-					<select name="onlyViewer" class="selectpicker show-tick form-control" data-live-search="true" title="<spring:message code="site.page.mylist.form.onlyvieweroption"/>">
+					<select name="viewers" class="selectpicker show-tick form-control" multiple data-live-search="true" title="<spring:message code="site.page.mylist.form.onlyvieweroption"/>" multiple>
 						<c:forEach items="${users}" var="user">
 							<option data-icon="glyphicon-user" value="${user.username}">${user.username}</option>
 						</c:forEach>
@@ -151,22 +151,48 @@
 						placeholder="<spring:message code="site.page.mylist.form.details"/>"></textarea>
 				</div>
 
-				<div class="form-group">
-					<input type="text" name="picture" class="form-control"
-						placeholder="<spring:message code="site.page.mylist.form.picture"/>" />
-				</div>
-
 				<div style="float: right; margin-bottom: 10px;" class="btn-group">
 					<button type="button" onclick="addLink();" class="btn btn-xs btn-success"><spring:message code="site.page.mylist.form.add"/></button>
 					<button type="button" onclick="removeLink();" class="btn btn-xs btn-danger"><spring:message code="site.page.mylist.form.remove"/></button>
 				</div>
 
-				<div class="form-group">
-					<div id="TextBoxesGroup">
-						<div id="TextBoxDiv1">
-							<input type="text" name="shoplink" id="shoplink1" class="form-control" style="margin-bottom: 2px; margin-top: 2px;" placeholder="<spring:message code="site.page.mylist.form.shoplink"/>1..." />
-						</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title"><spring:message code="site.page.mylist.form.picture"/></h3>
 					</div>
+					<div class="panel-body">
+						<div class="form-group">
+							<div id="TextBoxesGroup">
+								<div id="TextBoxDiv1">
+									<input type="text" name="shoplink" id="shoplink1" class="form-control" onBlur="javascript: onLinkChanged(this.id, this.value);" style="margin-bottom: 2px; margin-top: 2px;" placeholder='<spring:message code="site.page.mylist.form.shoplink"/>1...' />
+								</div>
+							</div>
+						</div>
+
+                        <div class="row">
+                            <div class="col-md-1">
+                                <button type="button" class="btn btn-xs btn-primary" style="display: none;" id="previous" onclick="javascript: onPrevious()">&lt;</button>
+                            </div>
+                            <div class="col-md-2">
+                                <span id="paging"></span>
+                            </div>
+                            <div class="col-md-1">
+                                <button type="button" class="btn btn-xs btn-primary" style="display: none;" id="next" onclick="javascript: onNext();">&gt;</button>
+                            </div>
+                            <div class="col-md-2">
+                                &nbsp;
+                            </div>
+                            <div class="col-md-6">
+                                <div align="center">
+                                    <img src="<c:url value="/resources/pictures/action-loader.gif" />" alt="Wait..." id="previews-waiter" style="padding:5px; display:none; margin:auto;"/>
+                                </div>
+                                <div id="previews"></div>
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="picture" id="picture">
+
+                    </div>
 				</div>
 
 				<input type="hidden" name="${_csrf.parameterName}"
@@ -185,21 +211,79 @@
 </div>
 
 <script type="text/javascript">
+
 	var counter = 2;
+    var currentPicture = 0;
+    var pictures = [];
+
+    function onPrevious() {
+        if (currentPicture === 0) return;
+        if (currentPicture - 1 === 0) $("#previous").hide();
+        else $("#previous").show();
+
+        currentPicture--;
+        $("#next").show();
+        $("#previews").html(getPictureLink(pictures[currentPicture]));
+        $("#picture").val(pictures[currentPicture]);
+        $("#paging").html((currentPicture + 1) + " / " + pictures.length);
+    }
+
+    function onNext() {
+        if (currentPicture === pictures.length - 1) return;
+        if (currentPicture + 1 === pictures.length - 1) $("#next").hide();
+        else $("#next").show();
+
+        currentPicture++;
+        $("#previous").show();
+        $("#previews").html(getPictureLink(pictures[currentPicture]));
+        $("#picture").val(pictures[currentPicture]);
+        $("#paging").html((currentPicture + 1) + " / " + pictures.length);
+    }
 
 	function addLink() {
-		if (counter > 10) {
-			window.alert('You cannot overpass 10 shop links for a gift.');
+		if (counter > 5) {
+			window.alert('You cannot overpass 5 shop links for a gift.');
 			return;
 		}
 
 		var newTextBoxDiv = $(document.createElement('div')).attr("id", 'TextBoxDiv' + counter);
 
-		newTextBoxDiv.after().html('<input style="margin-bottom: 2px; margin-top: 2px;" type="text" name="shoplink" id="shoplink' + counter + '" class="form-control" placeholder="<spring:message code="site.page.mylist.form.shoplink"/>' + counter + '..." />');
+		newTextBoxDiv.after().html('<input style="margin-bottom: 2px; margin-top: 2px;" type="text" name="shoplink" onBlur="javascript: onLinkChanged(this.id, this.value);" id="shoplink' + counter + '" class="form-control" placeholder="<spring:message code="site.page.mylist.form.shoplink"/>' + counter + '..." />');
 		newTextBoxDiv.appendTo("#TextBoxesGroup");
 
 		counter++;
 	}
+
+    function getPictureLink(url) {
+        return '<button type="button" onclick="javascript:$(\'#picture\').value=\'' + url + '\';" class="thumbnail"><img src="' + url + '">'
+    }
+
+    function onLinkChanged(id, link) {
+        if (link === "") return;
+        $("#previews-waiter").show();
+        $("#previews").hide();
+        $.ajax({
+            url: "https://old.mistergift.io/link-images",
+            data: { url: link },
+            success: function (data) {
+                $.each(data, function( key, val ) {
+                    if (pictures.indexOf(val) === -1) {
+                        pictures.push(val);
+                        if (pictures.length > 0) {
+                            $("#paging").html(0 + " / " + pictures.length);
+                            $("#previews").html(getPictureLink(val));
+                            $("#next").show();
+                            $("#picture").val(val);
+                        }
+                    }
+                });
+            },
+            dataType: "json"
+        }).always(function() {
+            $("#previews-waiter").hide();
+            $("#previews").show();
+        });
+    }
 
 	function removeLink() {
 		if (counter > 2) {

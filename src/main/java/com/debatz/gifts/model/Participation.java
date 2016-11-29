@@ -6,7 +6,7 @@ import java.io.Serializable;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "PARTICIPATION",
+@Table(name = "participations",
         uniqueConstraints = @UniqueConstraint(
                 columnNames = { "role", "username" })
 )

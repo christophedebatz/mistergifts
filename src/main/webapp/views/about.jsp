@@ -12,7 +12,7 @@
     <div class="jumbotron">
 
         <div style="float:right; max-width: 150px;">
-            <img src="https://media.licdn.com/mpr/mpr/shrinknp_400_400/p/3/005/08e/3b3/2d5bf46.jpg" width="150" height="150" class="img-rounded" style="padding: 10px;">
+            <img src="<c:url value="/resources/pictures/author.jpg" />" width="160" height="160" class="img-rounded" style="padding: 10px;">
         </div>
 
         <h2>A propos de MisterGifts</h2>

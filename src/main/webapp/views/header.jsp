@@ -13,7 +13,7 @@
 		<link href="<c:url value="/resources/css/bootstrap.min.css" />" rel="stylesheet">
         <link href="<c:url value="/resources/css/styles.css" />" rel="stylesheet">
         <link href="<c:url value="/resources/css/option-control/bootstrap-select.min.css" />" rel="stylesheet">
-		
+
 		<!--[if lt IE 9]>
 			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->

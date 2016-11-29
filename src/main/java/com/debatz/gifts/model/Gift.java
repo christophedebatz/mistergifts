@@ -8,9 +8,10 @@ import java.util.Objects;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "GIFTS")
+@Table(name = "gifts")
 public class Gift implements Serializable {
-    private static final long serialVersionUID = -3240452031165466075L;
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @Column(nullable = false)
@@ -24,7 +25,6 @@ public class Gift implements Serializable {
     @Column(name = "brand", nullable = true, length = 70)
     private String brand;
 
-    @Lob
     @Column(name = "details", nullable = true, columnDefinition = "text")
     private String details;
 
@@ -45,8 +45,8 @@ public class Gift implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date modificationDate;
 
-    @OneToOne
-    private User onlyViewer;
+    @OneToMany
+    private List<User> viewers;
 
     @ManyToOne
     private User booker;
@@ -58,7 +58,7 @@ public class Gift implements Serializable {
         super();
     }
 
-    public Gift(String name, String slug, String brand, String details, String picture, List<String> shopLinks, User owner, User onlyViewer) {
+    public Gift(String name, String slug, String brand, String details, String picture, List<String> shopLinks, User owner, List<User> viewers) {
         super();
 
         this.name = name;
@@ -68,7 +68,7 @@ public class Gift implements Serializable {
         this.picture = picture;
         this.shopLinks = shopLinks;
         this.owner = owner;
-        this.onlyViewer = onlyViewer;
+        this.viewers = viewers;
     }
 
     public Integer getId() {
@@ -143,12 +143,12 @@ public class Gift implements Serializable {
         this.owner = owner;
     }
 
-    public User getOnlyViewer() {
-        return onlyViewer;
+    public List<User> getViewers() {
+        return viewers;
     }
 
-    public void setOnlyViewer(User onlyViewer) {
-        this.onlyViewer = onlyViewer;
+    public void setViewers(List<User> viewers) {
+        this.viewers = viewers;
     }
 
     public Date getCreationDate() {
@@ -193,7 +193,7 @@ public class Gift implements Serializable {
                 ", slug='" + slug + '\'' +
                 ", shopLinks=" + shopLinks +
                 ", creationDate=" + creationDate +
-                ", onlyViewer=" + onlyViewer +
+                ", onlyViewer=" + viewers +
                 ", booker=" + booker +
                 ", owner=" + owner +
                 '}';

@@ -122,16 +122,19 @@ public class ListController extends ControllerBase
             @RequestParam(value = "details", required = false) String details,
             @RequestParam(value = "picture", required = false) String picture,
             @RequestParam(value = "shoplink", required = false) List<String> shoplinks,
-            @RequestParam(value = "onlyViewer", required = false) String onlyViewer) {
+            @RequestParam(value = "viewers", required = false) List<String> viewers) {
 
-        Pair<String, Boolean> uploadResult = this.uploadPicture(picture);
-        String pictureLocalPath = uploadResult.getFirst();
-        boolean hasError = uploadResult.getSecond();
+        //Pair<String, Boolean> uploadResult = this.uploadPicture(picture);
+        //String pictureLocalPath = uploadResult.getFirst();
+        //boolean hasError = uploadResult.getSecond();
+
+        boolean hasError = false;
 
         if (!hasError) {
             try {
                 User currentUser = this.userDao.findByUserName(this.sessionBean.getUsername());
-                User onlyViewerUser = this.userDao.findByUserName(onlyViewer);
+                List<User> viewerUsers = this.userDao.getUsersByNames(viewers);
+
                 Gift updatedGift = this.giftDao.find(giftId);
 
                 if (updatedGift == null) {
@@ -142,10 +145,10 @@ public class ListController extends ControllerBase
                     updatedGift.setSlug(SlugService.getSlug(updatedGift.getId(), name, brand));
                     updatedGift.setBrand(brand.toUpperCase());
                     updatedGift.setDetails(details.length() == 0 ? null : details.substring(0, 1).toUpperCase() + details.substring(1));
-                    updatedGift.setPicture(pictureLocalPath);
+                    updatedGift.setPicture(picture);
                     updatedGift.setShopLinks(shoplinks);
                     updatedGift.setOwner(currentUser);
-                    updatedGift.setOnlyViewer(onlyViewerUser);
+                    updatedGift.setViewers(viewerUsers);
                     updatedGift.setModificationDate(new Date());
 
                     this.userDao.update(currentUser);
@@ -170,16 +173,18 @@ public class ListController extends ControllerBase
             @RequestParam(value = "details", required = false) String details,
             @RequestParam(value = "picture", required = false) String picture,
             @RequestParam(value = "shoplink", required = false) List<String> shoplinks,
-            @RequestParam(value = "onlyViewer", required = false) String onlyViewer) {
+            @RequestParam(value = "onlyViewer", required = false) List<String> viewers) {
 
-        Pair<String, Boolean> uploadResult = this.uploadPicture(picture);
-        String pictureLocalPath = uploadResult.getFirst();
-        boolean hasError = uploadResult.getSecond();
+        //Pair<String, Boolean> uploadResult = this.uploadPicture(picture);
+        //String pictureLocalPath = uploadResult.getFirst();
+        //boolean hasError = uploadResult.getSecond();
+
+        boolean hasError = false;
 
         if (!hasError) {
             try {
                 User currentUser    = this.userDao.findByUserName(this.sessionBean.getUsername());
-                User onlyViewerUser = this.userDao.findByUserName(onlyViewer);
+                List<User> viewerUsers = this.userDao.getUsersByNames(viewers);
 
                 int id = this.giftDao.getNextSequence();
 
@@ -190,10 +195,10 @@ public class ListController extends ControllerBase
                 owned.setSlug(SlugService.getSlug(id, name, brand));
                 owned.setBrand(brand.toUpperCase());
                 owned.setDetails(details.length() == 0 ? null : details.substring(0, 1).toUpperCase() + details.substring(1));
-                owned.setPicture(pictureLocalPath);
+                owned.setPicture(picture);
                 owned.setShopLinks(shoplinks);
                 owned.setOwner(currentUser);
-                owned.setOnlyViewer(onlyViewerUser);
+                owned.setViewers(viewerUsers);
                 owned.setCreationDate(now);
                 owned.setModificationDate(now);
                 currentUser.addOwnedGift(owned);

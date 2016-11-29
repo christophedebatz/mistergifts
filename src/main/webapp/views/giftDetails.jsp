@@ -19,7 +19,7 @@
 				
 				<c:if test="${not empty selectedGift.picture}">
                     <div id="details-picture">
-					    <img src="/uploads/${selectedGift.picture}" title="${selectedGift.brand} ${selectedGift.name}" />
+					    <img src="${selectedGift.picture}" title="${selectedGift.brand} ${selectedGift.name}" />
                     </div>
                 </c:if>
 

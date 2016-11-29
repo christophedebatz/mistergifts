@@ -11,9 +11,12 @@ public class SlugService
 
 	private static final Pattern NONLATIN = Pattern.compile("[^\\w-]");
 	private static final Pattern WHITESPACE = Pattern.compile("[\\s]");
-	
-	
-	
+
+	/**
+	 *
+	 * @param input
+	 * @return
+     */
 	public static String getSlug(String input) 
 	{
 	    if (input == null) {
@@ -27,6 +30,13 @@ public class SlugService
 	    return slug.toLowerCase(Locale.FRANCE);
 	}
 
+	/**
+	 *
+	 * @param id
+	 * @param name
+	 * @param brand
+     * @return
+     */
 	public static String getSlug(int id, String name, String brand) {
 		StringBuilder slugInput = new StringBuilder();
 		slugInput.append(id);
