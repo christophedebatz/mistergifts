@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -29,9 +30,9 @@ public class ListController extends ControllerBase
 {
     private static final Logger logger = LogManager.getLogger(ListController.class);
 
-    //private static final String UPLOADS_DIRECTORY = "/home/pi/uploads/mistergifts/";
+    public static final String UPLOADS_DIRECTORY = "/home/mgadmin/uploads_old";
 
-    private static final String UPLOADS_DIRECTORY = "/Users/christophedebatz/Documents/workspace/MisterGifts/uploads/";
+    //public static final String UPLOADS_DIRECTORY = "/Users/christophedebatz/Documents/workspace/MisterGifts/uploads/";
 
     @Autowired
     private SessionBean sessionBean;
@@ -173,37 +174,36 @@ public class ListController extends ControllerBase
             @RequestParam(value = "details", required = false) String details,
             @RequestParam(value = "picture", required = false) String picture,
             @RequestParam(value = "shoplink", required = false) List<String> shoplinks,
-            @RequestParam(value = "onlyViewer", required = false) List<String> viewers) {
+            @RequestParam(value = "viewers", required = false) List<String> viewers) {
 
-        //Pair<String, Boolean> uploadResult = this.uploadPicture(picture);
-        //String pictureLocalPath = uploadResult.getFirst();
-        //boolean hasError = uploadResult.getSecond();
-
+        Gift owned = new Gift();
         boolean hasError = false;
+
+        if (picture != null) {
+            Pair<String, Boolean> uploadResult = uploadPicture(picture);
+            owned.setPicture(uploadResult.getFirst());
+            hasError = uploadResult.getSecond();
+        }
 
         if (!hasError) {
             try {
-                User currentUser    = this.userDao.findByUserName(this.sessionBean.getUsername());
-                List<User> viewerUsers = this.userDao.getUsersByNames(viewers);
+                User currentUser = userDao.findByUserName(sessionBean.getUsername());
+                List<User> viewerUsers = userDao.getUsersByNames(viewers);
 
-                int id = this.giftDao.getNextSequence();
-
-                Gift owned = new Gift();
-                Date now = new Date();
+                int id = giftDao.getNextSequence();
                 owned.setId(id);
                 owned.setName(name.substring(0, 1).toUpperCase() + name.substring(1));
                 owned.setSlug(SlugService.getSlug(id, name, brand));
                 owned.setBrand(brand.toUpperCase());
                 owned.setDetails(details.length() == 0 ? null : details.substring(0, 1).toUpperCase() + details.substring(1));
-                owned.setPicture(picture);
-                owned.setShopLinks(shoplinks);
+                Optional.ofNullable(shoplinks).ifPresent(owned::setShopLinks);
                 owned.setOwner(currentUser);
                 owned.setViewers(viewerUsers);
-                owned.setCreationDate(now);
-                owned.setModificationDate(now);
+                owned.setCreationDate(new Date());
+                owned.setModificationDate(new Date());
                 currentUser.addOwnedGift(owned);
 
-                this.userDao.update(currentUser);
+                userDao.update(currentUser);
                 hasError = false;
 
             } catch (Exception ex) {
@@ -218,6 +218,11 @@ public class ListController extends ControllerBase
         return model;
     }
 
+    /**
+     *
+     * @param picture
+     * @return
+     */
     private Pair<String, Boolean> uploadPicture(String picture) {
         String pictureLocalPath = null;
         boolean hasError = true;
@@ -231,7 +236,7 @@ public class ListController extends ControllerBase
             String[] pictureExtArray = picture.split("\\.");
             String pictureExt = pictureExtArray[pictureExtArray.length - 1];
 
-            pictureLocalPath = UUID.randomUUID().toString() + "." + pictureExt;
+            pictureLocalPath = UUID.randomUUID().toString().replace("-", "") + "." + pictureExt;
             String uploadLocalPath = UPLOADS_DIRECTORY + pictureLocalPath;
 
             try {

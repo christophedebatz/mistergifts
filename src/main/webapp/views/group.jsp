@@ -55,8 +55,14 @@
 
                                 <c:forEach items="${user.ownedGifts}" var="gift">
 
-                                    <c:set var="isSecured" value="${gift.viewers != null && gift.viewers.size() > 0 && gift.viewers.stream().anyMatch(user -> user.getUsername().equals(pageContext.request.userPrincipal.name)) }"/>
-                                    <c:if test="${(gift.viewers == null) || isSecured}">
+                                    <c:set var="isSecured" value="false" />
+                                    <c:forEach items="${gift.viewers}" var="viewer">
+                                        <c:if test="${viewer.username eq pageContext.request.userPrincipal.name}">
+                                            <c:set var="isSecured" value="true" />
+                                        </c:if>
+                                    </c:forEach>
+
+                                    <c:if test="${gift.viewers == null || empty gift.viewers || isSecured}">
 
                                         <c:choose>
                                             <c:when test="${gift.booker ne null}">

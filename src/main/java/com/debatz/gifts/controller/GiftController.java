@@ -12,7 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class GiftController extends ControllerBase
@@ -30,7 +34,19 @@ public class GiftController extends ControllerBase
     public ModelAndView myListGiftPage(@PathVariable(value = "slug") final String slug)
     {
         ModelAndView model = new ModelAndView();
-        model.addObject("selectedGift", this.giftDao.findGift(slug));
+        Gift gift = giftDao.findGift(slug);
+
+        Map<String, String> links = new HashMap<>();
+        gift.getShopLinks().stream().forEach(link -> {
+            try {
+                URI uri = new URI(link);
+                String domain = uri.getHost();
+                links.put(link, domain.startsWith("www.") ? domain.substring(4) : domain);
+            } catch (URISyntaxException ignored) { }
+        });
+
+        model.addObject("links", links);
+        model.addObject("selectedGift", gift);
         model.setViewName("giftDetails");
 
         return model;
@@ -47,8 +63,8 @@ public class GiftController extends ControllerBase
             List<Gift> userGifts = currentUser.getOwnedGifts();
             userGifts.remove(giftToRemove);
             currentUser.setOwnedGifts(userGifts);
-            this.giftDao.remove(giftToRemove.getId());
-            this.userDao.update(currentUser);
+            giftDao.remove(giftToRemove.getId());
+            userDao.update(currentUser);
         }
 
         ModelAndView model = new ModelAndView();
@@ -56,4 +72,5 @@ public class GiftController extends ControllerBase
 
         return model;
     }
+
 }

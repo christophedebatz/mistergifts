@@ -17,7 +17,7 @@
 			<c:when test="${error != null}">
 
 				<div class="alert alert-warning" role="alert">
-					<p>Error when uploading picture.</p>
+					<p>Form was not filled correctly or an error occured. Try again or contact me.</p>
 				</div>
 
 			</c:when>
@@ -52,8 +52,8 @@
 									</c:if>
 									<a about="w" href="<c:url value="/gift/${gift.slug}" />">
 									<c:choose>
-										<c:when test="${fn:length(gift.name) > 23 }">
-											${fn:substring(gift.name, 0, 25)}...
+										<c:when test="${fn:length(gift.name) > 30 }">
+											${fn:substring(gift.name, 0, 27)}...
 										</c:when>
 										<c:otherwise>
 											${gift.name}
@@ -169,24 +169,31 @@
 							</div>
 						</div>
 
+                        <div align="center">
+                            <img src="<c:url value="/resources/pictures/action-loader.gif" />" alt="Wait..." id="previews-waiter" style="padding:5px; display:none; margin:auto;"/>
+                        </div>
+
                         <div class="row">
                             <div class="col-md-1">
-                                <button type="button" class="btn btn-xs btn-primary" style="display: none;" id="previous" onclick="javascript: onPrevious()">&lt;</button>
+                                <button type="button" class="btn btn-xs btn-primary" style="display: none;" id="previous" onclick="javascript: onPrevious()">
+                                    <span class="glyphicon glyphicon-chevron-left"></span>
+                                </button>
                             </div>
                             <div class="col-md-2">
                                 <span id="paging"></span>
                             </div>
                             <div class="col-md-1">
-                                <button type="button" class="btn btn-xs btn-primary" style="display: none;" id="next" onclick="javascript: onNext();">&gt;</button>
-                            </div>
-                            <div class="col-md-2">
-                                &nbsp;
+                                <button type="button" class="btn btn-xs btn-primary" style="display: none;" id="next" onclick="javascript: onNext();">
+                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                </button>
                             </div>
                             <div class="col-md-6">
-                                <div align="center">
-                                    <img src="<c:url value="/resources/pictures/action-loader.gif" />" alt="Wait..." id="previews-waiter" style="padding:5px; display:none; margin:auto;"/>
-                                </div>
                                 <div id="previews"></div>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-xs btn-primary" style="display: none;" id="remove" onclick="javascript: onRemove();">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
                             </div>
                         </div>
 
@@ -240,6 +247,16 @@
         $("#paging").html((currentPicture + 1) + " / " + pictures.length);
     }
 
+    function onRemove() {
+        $("#previous").hide();
+        $("#next").hide();
+        $("#picture").val("");
+        $("#previews").hide();
+        $("#remove").hide();
+        $("#paging").hide();
+        pictures = [];
+    }
+
 	function addLink() {
 		if (counter > 5) {
 			window.alert('You cannot overpass 5 shop links for a gift.');
@@ -250,7 +267,6 @@
 
 		newTextBoxDiv.after().html('<input style="margin-bottom: 2px; margin-top: 2px;" type="text" name="shoplink" onBlur="javascript: onLinkChanged(this.id, this.value);" id="shoplink' + counter + '" class="form-control" placeholder="<spring:message code="site.page.mylist.form.shoplink"/>' + counter + '..." />');
 		newTextBoxDiv.appendTo("#TextBoxesGroup");
-
 		counter++;
 	}
 
@@ -259,21 +275,25 @@
     }
 
     function onLinkChanged(id, link) {
+        var address = "https://old.mistergift.io/link-images";
+        //var address = "http://localhost:8080/mistergifts/link-images";
+
         if (link === "") return;
         $("#previews-waiter").show();
         $("#previews").hide();
         $.ajax({
-            url: "https://old.mistergift.io/link-images",
+            url: address,
             data: { url: link },
             success: function (data) {
                 $.each(data, function( key, val ) {
                     if (pictures.indexOf(val) === -1) {
                         pictures.push(val);
                         if (pictures.length > 0) {
-                            $("#paging").html(0 + " / " + pictures.length);
+                            $("#paging").show().html("1 / " + pictures.length);
                             $("#previews").html(getPictureLink(val));
                             $("#next").show();
                             $("#picture").val(val);
+                            $("#remove").show();
                         }
                     }
                 });

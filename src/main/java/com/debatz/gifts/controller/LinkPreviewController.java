@@ -20,11 +20,9 @@ public class LinkPreviewController {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody ResponseEntity<List<String>> getLinkImages(@RequestParam(value = "url") final String url) {
+    public @ResponseBody ResponseEntity<List<String>> getLinkImages(@RequestParam(value = "url") String url) {
         List<String> images = new ArrayList<>();
-        if (!url.startsWith("http")) {
-            return ResponseEntity.badRequest().body(images);
-        }
+        url = url.startsWith("http") ? url : "http://" + url;
         try {
             return ResponseEntity.ok(HttpImageProvider.getImages(url));
         } catch (IOException e) {

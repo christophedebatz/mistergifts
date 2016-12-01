@@ -1,11 +1,16 @@
 package com.debatz.gifts.model;
 
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.CascadeType;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "gifts")
@@ -34,8 +39,9 @@ public class Gift implements Serializable {
     @Column(name = "slug", unique = true, nullable = false)
     private String slug;
 
-    @Column(name = "shoplinks", unique = false, nullable = true, length = 255)
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "gifts_links")
+    @Cascade(value = { CascadeType.ALL })
     private List<String> shopLinks;
 
     @Column(updatable = false)
@@ -45,7 +51,7 @@ public class Gift implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date modificationDate;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<User> viewers;
 
     @ManyToOne

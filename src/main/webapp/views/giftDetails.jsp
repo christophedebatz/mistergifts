@@ -17,9 +17,9 @@
 			<c:when test="${selectedGift != null}">
 				<legend>${selectedGift.name}</legend>
 				
-				<c:if test="${not empty selectedGift.picture}">
+				<c:if test="${selectedGift.picture != null}">
                     <div id="details-picture">
-					    <img src="${selectedGift.picture}" title="${selectedGift.brand} ${selectedGift.name}" />
+					    <img src="<c:url value="/file/${selectedGift.picture}/" />" title="${selectedGift.brand} ${selectedGift.name}" />
                     </div>
                 </c:if>
 
@@ -41,9 +41,9 @@
 						<h4><span class="label label-default">
 							<spring:message code="site.page.details.shoplinks"/>
 						</span></h4>
-						<ul style="list-style-type: none;">
-							<c:forEach items="${selectedGift.shopLinks}" var="link">
-								<li><span class="glyphicon glyphicon-link"> <a class="link-list" href="${link}" target="_blank">${fn:substring(link, 0, 120)}...</a></span></li>
+						<ul style="list-style-type: none;	">
+							<c:forEach items="${links}" var="link">
+								<li><span class="glyphicon glyphicon-link"> <spring:message code="site.page.details.shoplinks.link"/> <a class="link-list" href="${link.key}" target="_blank">${link.value}</a></span></li>
 							</c:forEach>
 						</ul>
 					</div>

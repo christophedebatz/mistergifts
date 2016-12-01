@@ -37,7 +37,7 @@ public abstract class AbstractDao<T, K>
 
     @Transactional
     public boolean remove(K entityId) {
-        this.em.remove(this.em.getReference(this.entityClass, entityId));
+        em.remove(this.em.getReference(this.entityClass, entityId));
         return true;
     }
 
