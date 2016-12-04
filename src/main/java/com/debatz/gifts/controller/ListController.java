@@ -9,15 +9,16 @@ import com.debatz.gifts.model.dao.UserDao;
 import com.debatz.gifts.service.FileService;
 import com.debatz.gifts.service.RemoteUploadService;
 import com.debatz.gifts.service.SlugService;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
@@ -30,9 +31,9 @@ public class ListController extends ControllerBase
 {
     private static final Logger logger = LogManager.getLogger(ListController.class);
 
-    public static final String UPLOADS_DIRECTORY = "/home/mgadmin/uploads_old";
+    //public static final String UPLOADS_DIRECTORY = "/home/mgadmin/uploads_old/";
 
-    //public static final String UPLOADS_DIRECTORY = "/Users/christophedebatz/Documents/workspace/MisterGifts/uploads/";
+    public static final String UPLOADS_DIRECTORY = "/Users/christophedebatz/Documents/workspace/MisterGifts/uploads/";
 
     @Autowired
     private SessionBean sessionBean;
@@ -115,58 +116,6 @@ public class ListController extends ControllerBase
         return model;
     }
 
-    @RequestMapping(value = "/mylist/{giftId}", method = RequestMethod.POST)
-    public ModelAndView myListPageUpdate(
-            @PathVariable(value = "giftId") final Integer giftId,
-            @RequestParam(value = "name", required = true) String name,
-            @RequestParam(value = "brand", required = false) String brand,
-            @RequestParam(value = "details", required = false) String details,
-            @RequestParam(value = "picture", required = false) String picture,
-            @RequestParam(value = "shoplink", required = false) List<String> shoplinks,
-            @RequestParam(value = "viewers", required = false) List<String> viewers) {
-
-        //Pair<String, Boolean> uploadResult = this.uploadPicture(picture);
-        //String pictureLocalPath = uploadResult.getFirst();
-        //boolean hasError = uploadResult.getSecond();
-
-        boolean hasError = false;
-
-        if (!hasError) {
-            try {
-                User currentUser = this.userDao.findByUserName(this.sessionBean.getUsername());
-                List<User> viewerUsers = this.userDao.getUsersByNames(viewers);
-
-                Gift updatedGift = this.giftDao.find(giftId);
-
-                if (updatedGift == null) {
-                    hasError = true;
-                }
-                else {
-                    updatedGift.setName(name.substring(0, 1).toUpperCase() + name.substring(1));
-                    updatedGift.setSlug(SlugService.getSlug(updatedGift.getId(), name, brand));
-                    updatedGift.setBrand(brand.toUpperCase());
-                    updatedGift.setDetails(details.length() == 0 ? null : details.substring(0, 1).toUpperCase() + details.substring(1));
-                    updatedGift.setPicture(picture);
-                    updatedGift.setShopLinks(shoplinks);
-                    updatedGift.setOwner(currentUser);
-                    updatedGift.setViewers(viewerUsers);
-                    updatedGift.setModificationDate(new Date());
-
-                    this.userDao.update(currentUser);
-                    hasError = false;
-                }
-            } catch (Exception ex) {
-                logger.debug(ex.getMessage(), ex);
-                hasError = true;
-            }
-        }
-
-        ModelAndView model = new ModelAndView();
-        model.setViewName("redirect:/mylist" + (hasError ? "?error" : ""));
-
-        return model;
-    }
-
     @RequestMapping(value = "/mylist", method = RequestMethod.POST)
     public ModelAndView myListPageInsert(
             @RequestParam(value = "name", required = true) String name,
@@ -177,15 +126,15 @@ public class ListController extends ControllerBase
             @RequestParam(value = "viewers", required = false) List<String> viewers) {
 
         Gift owned = new Gift();
-        boolean hasError = false;
+        String errors = null;
 
         if (picture != null) {
-            Pair<String, Boolean> uploadResult = uploadPicture(picture);
+            Pair<String, String> uploadResult = uploadPicture(picture);
             owned.setPicture(uploadResult.getFirst());
-            hasError = uploadResult.getSecond();
+            errors = uploadResult.getSecond();
         }
 
-        if (!hasError) {
+        if (errors == null) {
             try {
                 User currentUser = userDao.findByUserName(sessionBean.getUsername());
                 List<User> viewerUsers = userDao.getUsersByNames(viewers);
@@ -204,16 +153,17 @@ public class ListController extends ControllerBase
                 currentUser.addOwnedGift(owned);
 
                 userDao.update(currentUser);
-                hasError = false;
 
             } catch (Exception ex) {
-                logger.debug(ex.getMessage(), ex);
-                hasError = true;
+                logger.error(ex.getMessage(), ex);
+                String e = ex.getMessage().replaceAll("\\n", "");
+                e = e.replaceAll("\\r", "");
+                errors = e;
             }
         }
 
         ModelAndView model = new ModelAndView();
-        model.setViewName("redirect:/mylist" + (hasError ? "?error" : ""));
+        model.setViewName("redirect:/mylist?" + errors);
 
         return model;
     }
@@ -223,31 +173,29 @@ public class ListController extends ControllerBase
      * @param picture
      * @return
      */
-    private Pair<String, Boolean> uploadPicture(String picture) {
+    private Pair<String, String> uploadPicture(String picture) {
         String pictureLocalPath = null;
-        boolean hasError = true;
 
         if (picture == null || picture.equals("")) {
-            hasError = false;
+            return new Pair<>(null, null);
         }
 
-        else if (FileService.checkIfExists(picture))
-        {
-            String[] pictureExtArray = picture.split("\\.");
-            String pictureExt = pictureExtArray[pictureExtArray.length - 1];
+        else if (FileService.checkIfExists(picture)) {
+            String pictureExt = FilenameUtils.getExtension(picture);
+            pictureExt = pictureExt.startsWith("jpeg") ? "jpeg" : pictureExt.substring(0, 3);
 
             pictureLocalPath = UUID.randomUUID().toString().replace("-", "") + "." + pictureExt;
             String uploadLocalPath = UPLOADS_DIRECTORY + pictureLocalPath;
 
             try {
                 RemoteUploadService.save(picture, uploadLocalPath);
-                hasError = false;
 
             } catch (Exception ex) {
-                logger.debug(ex.getMessage());
+                logger.error(ex.getMessage());
+                return new Pair<>(null, "upload");
             }
         }
 
-        return new Pair<>(pictureLocalPath, hasError);
+        return new Pair<>(pictureLocalPath, null);
     }
 }

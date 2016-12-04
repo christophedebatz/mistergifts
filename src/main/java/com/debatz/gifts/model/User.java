@@ -31,9 +31,9 @@ public class User implements Serializable
     
     @OneToMany(mappedBy="owner", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private List<Gift> ownedGifts = new ArrayList<Gift>();
-   
-    @OneToMany(mappedBy="booker", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    private List<Gift> bookedGifts = new ArrayList<Gift>();
+
+	@OneToMany(mappedBy="booker", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	private List<Gift> bookedGifts = new ArrayList<Gift>();
     
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<UserRole> roles = new ArrayList<UserRole>(0);

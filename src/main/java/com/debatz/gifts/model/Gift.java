@@ -42,6 +42,7 @@ public class Gift implements Serializable {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "gifts_links")
     @Cascade(value = { CascadeType.ALL })
+    @Column(name = "link", length = 1024)
     private List<String> shopLinks;
 
     @Column(updatable = false)

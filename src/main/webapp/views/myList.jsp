@@ -39,7 +39,6 @@
 								<th><spring:message code="site.page.mylist.tableheader.brand"/></th>
 								<th><spring:message code="site.page.mylist.tableheader.details"/></th>
 								<th>&nbsp;</th>
-								<th>&nbsp;</th>
 							</tr>
 						</thead>
 
@@ -85,20 +84,11 @@
 								</td>
 								<td width="20">
 									<c:if test="${gift.booker eq null}">
-										<form action="<c:url value="/mylist/${gift.id}" />" method="post" onsubmit="window.alert('Not implemented yet.'); return false;">
-											<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-											<label for="submitUpdate" class="btn btn-xs btn-default" data-toggle="tooltip" data-placement="top" title="Update gift"><i class="glyphicon glyphicon-edit"></i></label>
-											<input id="submitUpdate" type="submit" class="hidden" />
-										</form>
-									</c:if>
-								</td>
-								<td width="20">
-									<c:if test="${gift.booker eq null}">
 										<form action="<c:url value="/gift/${gift.id}" />" method="post">
 											<input type="hidden" name="giftId" value="${gift.id}" />
 											<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-											<label for="submitDelete" class="btn btn-xs btn-danger" data-toggle="tooltip" data-placement="top" title="Remove gift"><i class="glyphicon glyphicon-trash"></i></label>
-											<input id="submitDelete" type="submit" class="hidden" />
+											<label for="submitDelete-${gift.id}" class="btn btn-xs btn-danger" data-toggle="tooltip" data-placement="top" title="Remove gift"><i class="glyphicon glyphicon-trash"></i></label>
+											<input id="submitDelete-${gift.id}" type="submit" class="hidden" />
 										</form>
 									</c:if>
 									</td>
@@ -275,8 +265,8 @@
     }
 
     function onLinkChanged(id, link) {
-        var address = "https://old.mistergift.io/link-images";
-        //var address = "http://localhost:8080/mistergifts/link-images";
+        //var address = "https://old.mistergift.io/link-images";
+        var address = "http://localhost:8080/mistergifts/link-images";
 
         if (link === "") return;
         $("#previews-waiter").show();

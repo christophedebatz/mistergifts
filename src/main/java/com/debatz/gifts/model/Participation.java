@@ -2,14 +2,12 @@ package com.debatz.gifts.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "participations",
-        uniqueConstraints = @UniqueConstraint(
-                columnNames = { "role", "username" })
-)
+@Table(name = "participations", schema = "mistergifts")
 public class Participation implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -23,9 +21,16 @@ public class Participation implements Serializable {
     @JoinColumn(name = "username", nullable = false)
     private User user;
 
-    @Column(nullable = false)
-    private int participation = 0;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type")
+    private ParticipationType type;
 
+    @Column(name = "value", nullable = false)
+    private int value = 0;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "date")
+    private Date date = new Date();
 
     public Participation() {
     }
@@ -46,11 +51,27 @@ public class Participation implements Serializable {
         this.user = user;
     }
 
-    public int getParticipation() {
-        return participation;
+    public ParticipationType getType() {
+        return type;
     }
 
-    public void setParticipation(int participation) {
-        this.participation = participation;
+    public void setType(ParticipationType type) {
+        this.type = type;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date creationDate) {
+        this.date = creationDate;
     }
 }
