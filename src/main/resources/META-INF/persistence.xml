@@ -10,11 +10,11 @@
         <class>com.debatz.gifts.model.UserRole</class>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/mistergifts?characterEncoding=utf8" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3307/mistergifts?characterEncoding=utf8" />
             <property name="javax.persistence.jdbc.user" value="root" />
-            <property name="javax.persistence.jdbc.password" value="admin" />
+            <property name="javax.persistence.jdbc.password" value="" />
             <property name="eclipselink.query-results-cache" value="false"/>
-            <property name="eclipselink.ddl-generation" value="none"/><!--create-or-extend-tables -->
+            <property name="eclipselink.ddl-generation" value="create-or-extend-tables"/><!--create-or-extend-tables -->
             <property name="eclipselink.ddl-generation.output-mode" value="database"/>
         </properties>
      </persistence-unit>
